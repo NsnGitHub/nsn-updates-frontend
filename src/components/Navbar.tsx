@@ -1,7 +1,7 @@
 import Logo from "./Logo";
 import { MagnifyingGlassIcon, MoonIcon, Pencil2Icon, PersonIcon } from "@radix-ui/react-icons";
 import { Input } from "./ui/input";
-import { BellRingIcon, LucideBell, SunIcon, UserRoundPlusIcon } from "lucide-react";
+import { BellRingIcon, SunIcon, UserRoundPlusIcon } from "lucide-react";
 
 const iconSize = "w-7 h-7";
 
