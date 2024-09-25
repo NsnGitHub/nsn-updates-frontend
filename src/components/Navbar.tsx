@@ -1,7 +1,7 @@
 import Logo from "./Logo";
 import { MagnifyingGlassIcon, MoonIcon, Pencil2Icon, PersonIcon } from "@radix-ui/react-icons";
 import { Input } from "./ui/input";
-import { LucideBell, SunIcon } from "lucide-react";
+import { BellRingIcon, LucideBell, SunIcon, UserRoundPlusIcon } from "lucide-react";
 
 const iconSize = "w-7 h-7";
 
@@ -22,9 +22,15 @@ export default function Navbar() {
       </li>
       <li className="relative">
         <div className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 flex items-center justify-center">
+          <span className="text-white text-xs">2</span>
+        </div>
+        <UserRoundPlusIcon className={`${iconSize}`} />
+      </li>
+      <li className="relative">
+        <div className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 flex items-center justify-center">
           <span className="text-white text-xs">5</span>
         </div>
-        <LucideBell className={`${iconSize}`} />
+        <BellRingIcon className={`${iconSize}`} />
       </li>
       <li>
         <MoonIcon className={`${iconSize}`} />
