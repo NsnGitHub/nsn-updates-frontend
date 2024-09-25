@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import useError from "@/lib/useError";
 
 type LoginData = {
   username: string;
@@ -9,16 +10,34 @@ type LoginData = {
 
 export default function Login() {
   const [loginData, setLoginData] = useState<LoginData>({ username: "", password: "" });
-  const [isError, setIsError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const handleError = () => {
-    setIsError(true);
-    setErrorMessage(`Something about a wrong password for user ${loginData.username}`);
-  };
+  const { isError, errorMessage, handleError } = useError();
 
   const handleLoginDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    const baseUrl = "http://localhost:8080";
+
+    try {
+      const response = await fetch(`${baseUrl}/api/v1/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        handleError(errorData.message);
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -37,7 +56,7 @@ export default function Login() {
         value={loginData.password}
         onChange={handleLoginDataChange}
       ></Input>
-      <Button className="border-1 rounded-full" onClick={handleError}>
+      <Button className="border-1 rounded-full" onClick={handleSubmit}>
         Log in
       </Button>
 
@@ -48,6 +67,7 @@ export default function Login() {
       </div>
 
       <Button className="border-1 rounded-full bg-blue-400 hover:bg-blue-500">Register</Button>
+      <Button className="border-1 rounded-full bg-gray-500 hover:bg-gray-600">Continue as guest</Button>
 
       {isError && <div className="text-red-500 w-full text-center text-sm">{errorMessage}</div>}
     </section>
