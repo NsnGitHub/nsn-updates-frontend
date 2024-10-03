@@ -2,12 +2,11 @@ import Logo from "./Logo";
 import { MagnifyingGlassIcon, MoonIcon, Pencil2Icon, PersonIcon } from "@radix-ui/react-icons";
 import { Input } from "./ui/input";
 import { BellRingIcon, SunIcon, UserRoundPlusIcon } from "lucide-react";
-
-const iconSize = "w-7 h-7";
+import { iconSize } from "@/constants/iconSize";
 
 export default function Navbar() {
   return (
-    <ul className="flex flex-row items-center gap-12 px-12 py-2">
+    <ul className="flex flex-row items-center gap-12 px-12 py-2 fixed w-full top-0 left-0">
       <li>
         <Logo />
       </li>
@@ -18,26 +17,26 @@ export default function Navbar() {
         </div>
       </li>
       <li className="ml-auto">
-        <Pencil2Icon className={`${iconSize}`} />
+        <Pencil2Icon className={iconSize} />
       </li>
       <li className="relative">
         <div className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 flex items-center justify-center">
           <span className="text-white text-xs">2</span>
         </div>
-        <UserRoundPlusIcon className={`${iconSize}`} />
+        <UserRoundPlusIcon className={iconSize} />
       </li>
       <li className="relative">
         <div className="absolute right-0 top-0 rounded-full bg-red-500 w-4 h-4 flex items-center justify-center">
           <span className="text-white text-xs">5</span>
         </div>
-        <BellRingIcon className={`${iconSize}`} />
+        <BellRingIcon className={iconSize} />
       </li>
       <li>
-        <MoonIcon className={`${iconSize}`} />
+        <MoonIcon className={iconSize} />
         <SunIcon className={`hidden ${iconSize}`} />
       </li>
       <li>
-        <PersonIcon className={`${iconSize}`} />
+        <PersonIcon className={iconSize} />
       </li>
     </ul>
   );
