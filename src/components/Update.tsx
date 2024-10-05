@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { iconSize } from "@/constants/iconSize";
-import extractInitials from "@/util/extractInitials";
-import convertDateTimeString from "@/util/convertDateTimeString";
+import { convertDateTimeString } from "@/util/convertDateTimeString";
+import UserProfileHeader from "./UserProfileHeader";
 
 type UpdatePost = {
   update: {
@@ -23,19 +22,9 @@ type UpdatePost = {
 export default function Update({ update }: UpdatePost) {
   const [isHeartHovered, setIsHeartHovered] = useState<boolean>(false);
 
-  const initials = extractInitials(update.postingUser.displayName);
-
   return (
     <div className="border py-8 px-8 rounded-md flex flex-col gap-8">
-      <div className="flex flex-row h-12">
-        <Avatar className="h-12 w-12">
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col ml-4 h-12">
-          <h4 className="text-lg">{update.postingUser.displayName}</h4>
-          <span className="text-sm text-gray-400">@{update.postingUser.username}</span>
-        </div>
-      </div>
+      <UserProfileHeader username={update.postingUser.username} displayName={update.postingUser.displayName} />
       <div>
         <p className="w-[80ch] text-xl">{update.content}</p>
       </div>
