@@ -1,7 +1,5 @@
-import React from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import extractInitials from "@/util/extractInitials";
-import { PersonIcon } from "@radix-ui/react-icons";
 
 type UserProfileHeader = {
   username: string;

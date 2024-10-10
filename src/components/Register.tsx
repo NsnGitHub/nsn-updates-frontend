@@ -2,21 +2,46 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useError from "@/lib/useError";
+import { useNavigate } from "react-router-dom";
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
-type PrivacySetting = "PUBLIC" | "PRIVATE" | "FOLLOWER";
+type ePrivacySetting = "PUBLIC" | "PRIVATE" | "FOLLOWER";
 
 type RegisterData = {
   username: string;
   password: string;
   displayName: string;
   email: string;
-  privacySetting: PrivacySetting;
+  ePrivacySetting: ePrivacySetting;
 };
 
 const privacySelector = "bg-white text-black hover:bg-blue-300 focus:bg-blue-400";
 const privacySelectorActive = "bg-blue-400 text-black";
+
+const registerAPI = "http://localhost:8080/api/v1/register";
+const registerUser = async (registerData: RegisterData) => {
+  try {
+    const res = await fetch(registerAPI, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(registerData),
+    });
+
+    if (!res.ok) {
+      const errorRes = await res.json();
+      throw new Error(errorRes.message);
+    }
+
+    return res;
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      throw e;
+    }
+
+    throw new Error("Unknown error has occurred");
+  }
+};
 
 export default function Register() {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -24,7 +49,7 @@ export default function Register() {
     password: "",
     displayName: "",
     email: "",
-    privacySetting: "PUBLIC",
+    ePrivacySetting: "PUBLIC",
   });
 
   const [registerDataValidationError, setRegisterDataValidationError] = useState<RegisterData>({
@@ -32,17 +57,28 @@ export default function Register() {
     password: "",
     displayName: "",
     email: "",
-    privacySetting: "PUBLIC",
+    ePrivacySetting: "PUBLIC",
   });
 
   const { isError, errorMessage } = useError();
+
+  const navigate = useNavigate();
 
   const handleRegisterDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRegisterData({ ...registerData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    validateRegisterData();
+  const handleSubmit = async () => {
+    if (validateRegisterData()) {
+      return;
+    }
+
+    try {
+      await registerUser(registerData);
+      navigate("/login");
+    } catch (error: unknown) {
+      console.error(error);
+    }
   };
 
   const validateRegisterData = () => {
@@ -56,7 +92,7 @@ export default function Register() {
       displayName: "",
       password: "",
       email: "",
-      privacySetting: registerData.privacySetting,
+      ePrivacySetting: registerData.ePrivacySetting,
     };
 
     if (!usernameRegex.test(registerData.username)) {
@@ -77,6 +113,9 @@ export default function Register() {
     }
 
     setRegisterDataValidationError(errors);
+
+    const hasError = Object.values(errors).some((errorMessage) => errorMessage != "");
+    return !hasError;
   };
 
   return (
@@ -87,6 +126,7 @@ export default function Register() {
           className={registerDataValidationError.username ? "focus-visible:ring-destructive" : ""}
           type="text"
           placeholder="Username"
+          id="username"
           name="username"
           value={registerData.username}
           onChange={handleRegisterDataChange}
@@ -100,6 +140,7 @@ export default function Register() {
           className={registerDataValidationError.displayName ? "focus-visible:ring-destructive" : ""}
           type="text"
           placeholder="Display Name"
+          id="displayName"
           name="displayName"
           value={registerData.displayName}
           onChange={handleRegisterDataChange}
@@ -115,6 +156,7 @@ export default function Register() {
           className={registerDataValidationError.password ? "focus-visible:ring-destructive" : ""}
           type="password"
           placeholder="Password"
+          id="password"
           name="password"
           value={registerData.password}
           onChange={handleRegisterDataChange}
@@ -128,6 +170,7 @@ export default function Register() {
           className={registerDataValidationError.email ? "focus-visible:ring-destructive" : ""}
           type="text"
           placeholder="Email"
+          id="email"
           name="email"
           value={registerData.email}
           onChange={handleRegisterDataChange}
@@ -136,29 +179,28 @@ export default function Register() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="privacy">Privacy Setting</label>
-
+        <label>Privacy Setting</label>
         <div className="flex flex-row">
           <Button
-            onClick={() => setRegisterData({ ...registerData, privacySetting: "PUBLIC" })}
+            onClick={() => setRegisterData({ ...registerData, ePrivacySetting: "PUBLIC" })}
             className={`rounded-none w-1/3 border rounded-l-md ${privacySelector} ${
-              registerData.privacySetting == "PUBLIC" ? privacySelectorActive : ""
+              registerData.ePrivacySetting == "PUBLIC" ? privacySelectorActive : ""
             }`}
           >
             Public
           </Button>
           <Button
-            onClick={() => setRegisterData({ ...registerData, privacySetting: "FOLLOWER" })}
+            onClick={() => setRegisterData({ ...registerData, ePrivacySetting: "FOLLOWER" })}
             className={`rounded-none w-1/3 border-t border-b ${privacySelector} ${
-              registerData.privacySetting == "FOLLOWER" ? privacySelectorActive : ""
+              registerData.ePrivacySetting == "FOLLOWER" ? privacySelectorActive : ""
             }`}
           >
             Followers
           </Button>
           <Button
-            onClick={() => setRegisterData({ ...registerData, privacySetting: "PRIVATE" })}
+            onClick={() => setRegisterData({ ...registerData, ePrivacySetting: "PRIVATE" })}
             className={`rounded-none w-1/3 border rounded-r-md ${privacySelector} ${
-              registerData.privacySetting == "PRIVATE" ? privacySelectorActive : ""
+              registerData.ePrivacySetting == "PRIVATE" ? privacySelectorActive : ""
             }`}
           >
             Private

@@ -2,41 +2,58 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useError from "@/lib/useError";
+import { useNavigate } from "react-router-dom";
 
 type LoginData = {
   username: string;
   password: string;
 };
 
+const loginAPI = "http://localhost:8080/api/v1/auth/login";
+const loginUser = async (loginData: LoginData) => {
+  try {
+    const res = await fetch(loginAPI, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    });
+
+    if (!res.ok) {
+      const errorRes = await res.json();
+      throw new Error(errorRes.message);
+    }
+
+    return res;
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      throw e;
+    }
+
+    throw new Error("Unknown error has occurred");
+  }
+};
+
 export default function Login() {
   const [loginData, setLoginData] = useState<LoginData>({ username: "", password: "" });
   const { isError, errorMessage, handleError } = useError();
+
+  const navigate = useNavigate();
 
   const handleLoginDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async () => {
-    const baseUrl = "http://localhost:8080";
-
     try {
-      const response = await fetch(`${baseUrl}/api/v1/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        handleError(errorData.message);
+      await loginUser(loginData);
+      navigate("/");
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        handleError(e.message);
       }
-
-      const data = await response.json();
-      console.log(data);
-    } catch (e) {
-      console.log(e);
     }
   };
 

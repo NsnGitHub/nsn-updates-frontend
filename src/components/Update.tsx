@@ -19,6 +19,36 @@ type UpdatePost = {
   };
 };
 
+const likeBaseAPI = "http://localhost:8080/api/v1/like";
+
+const likeUpdate = async (id: number) => {
+  try {
+    const res = await fetch(`${likeBaseAPI}/${id}`, {
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      console.log(await res.json());
+    }
+  } catch (e: unknown) {
+    console.log(e);
+  }
+};
+
+const unlikeUpdate = async (id: number) => {
+  try {
+    const res = await fetch(`${likeBaseAPI}/delete/${id}`, {
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      console.log(await res.json());
+    }
+  } catch (e: unknown) {
+    console.log(e);
+  }
+};
+
 export default function Update({ update }: UpdatePost) {
   const [isHeartHovered, setIsHeartHovered] = useState<boolean>(false);
 
@@ -35,11 +65,25 @@ export default function Update({ update }: UpdatePost) {
           onMouseLeave={() => setIsHeartHovered(false)}
         >
           {update.userHasLiked ? (
-            <div className="hover:cursor-pointer hover:scale-120 active:scale-90">
+            <div
+              className="hover:cursor-pointer hover:scale-120 active:scale-90"
+              onClick={() => {
+                update.numberOfLikes -= 1;
+                update.userHasLiked = false;
+                unlikeUpdate(update.id);
+              }}
+            >
               {!isHeartHovered ? <HeartFilledIcon className={iconSize} /> : <HeartIcon className={iconSize} />}
             </div>
           ) : (
-            <div className="hover:cursor-pointer hover:scale-120 active:scale-90">
+            <div
+              className="hover:cursor-pointer hover:scale-120 active:scale-90"
+              onClick={() => {
+                update.numberOfLikes += 1;
+                update.userHasLiked = true;
+                likeUpdate(update.id);
+              }}
+            >
               {!isHeartHovered ? <HeartIcon className={iconSize} /> : <HeartFilledIcon className={iconSize} />}
             </div>
           )}
