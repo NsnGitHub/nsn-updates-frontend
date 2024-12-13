@@ -3,21 +3,7 @@ import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { iconSize } from "@/constants/iconSize";
 import { convertDateTimeString } from "@/util/convertDateTimeString";
 import UserProfileHeader from "./UserProfileHeader";
-
-type UpdatePost = {
-  update: {
-    id: number;
-    content: string;
-    createdAt: string;
-    numberOfLikes: number;
-    postingUser: {
-      username: string;
-      displayName: string;
-    };
-    isEdited: boolean;
-    userHasLiked: boolean;
-  };
-};
+import { UpdatePost } from "@/types/UpdatePost";
 
 const likeBaseAPI = "http://localhost:8080/api/v1/like";
 
