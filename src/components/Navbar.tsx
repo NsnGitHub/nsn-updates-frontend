@@ -6,7 +6,10 @@ import { iconSize } from "@/constants/iconSize";
 import { Client } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
 
-export default function Navbar() {
+type NavbarProps = {
+  setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+};
+export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   const [stompClient, setStompClient] = useState<Client>();
 
   useEffect(() => {
@@ -41,7 +44,7 @@ export default function Navbar() {
           <Input type="search" placeholder="Search..." className="pl-10 focus-visible:ring-transparent m-0" />
         </div>
       </li>
-      <li className="ml-auto">
+      <li className="ml-auto hover:cursor-pointer" onClick={() => setCreatingUpdate(true)}>
         <Pencil2Icon className={iconSize} />
       </li>
       <li className="relative">
