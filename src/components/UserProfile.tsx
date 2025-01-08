@@ -20,26 +20,26 @@ export default function UserProfile() {
   const [expandedBio, setExpandedBio] = useState<boolean>(false);
   const [userUpdates, setUserUpdates] = useState<UpdatePost[]>([]);
 
-  useEffect(() => {
-    const fetchUpdates = async () => {
-      const baseAPI = `http://localhost:8080/api/v1/update/user/${sampleUser.username}`;
+  // useEffect(() => {
+  //   const fetchUpdates = async () => {
+  //     const baseAPI = `http://localhost:8080/api/v1/update/user/${sampleUser.username}`;
 
-      try {
-        const res = await fetch(baseAPI, {
-          method: "GET",
-          credentials: "include",
-        });
+  //     try {
+  //       const res = await fetch(baseAPI, {
+  //         method: "GET",
+  //         credentials: "include",
+  //       });
 
-        const data = await res.json();
-        setUserUpdates(data);
-        return res;
-      } catch (e: unknown) {
-        console.log(e);
-      }
-    };
+  //       const data = await res.json();
+  //       setUserUpdates(data);
+  //       return res;
+  //     } catch (e: unknown) {
+  //       console.log(e);
+  //     }
+  //   };
 
-    fetchUpdates();
-  }, []);
+  //   fetchUpdates();
+  // }, []);
 
   return (
     <>

@@ -1,8 +1,41 @@
 import React, { useState } from "react";
 import TextArea from "./UpdateCreate/TextArea";
-import { ButtonIcon, Cross1Icon } from "@radix-ui/react-icons";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import { BASE_API } from "@/constants/baseAPI";
 
-export default function UpdateCreate({ setCreatingUpdate }) {
+type UpdateCreateProps = {
+  setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const createUpdate = async (content: string) => {
+  const createUpdateAPI = `${BASE_API}/update/create`;
+
+  try {
+    const res = await fetch(createUpdateAPI, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: content }),
+    });
+
+    if (!res.ok) {
+      const errorRes = await res.json();
+      throw new Error(errorRes.message);
+    }
+
+    return res;
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      throw e;
+    }
+
+    throw new Error("Unknown error has occurred");
+  }
+};
+
+export default function UpdateCreate({ setCreatingUpdate }: UpdateCreateProps) {
   const [updateContent, setUpdateContent] = useState("");
 
   return (
@@ -16,7 +49,9 @@ export default function UpdateCreate({ setCreatingUpdate }) {
         </div>
         <div className="flex flex-row items-center justify-between px-16 w-full">
           <span>{1000 - updateContent.length}</span>
-          <button className="border rounded-md px-4 py-2 bg-blue-300">Create</button>
+          <button className="border rounded-md px-4 py-2 bg-blue-300" onClick={() => createUpdate(updateContent)}>
+            Create
+          </button>
         </div>
       </div>
     </div>

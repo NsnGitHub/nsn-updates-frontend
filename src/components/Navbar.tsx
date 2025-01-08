@@ -5,6 +5,11 @@ import { BellRingIcon, SunIcon, UserRoundPlusIcon } from "lucide-react";
 import { iconSize } from "@/constants/iconSize";
 import { Client } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
+import { toggleDarkMode } from "@/lib/toggleDarkMode";
+import UserProfile from "./UserProfile";
+import UserProfileHeader from "./UserProfileHeader";
+import Search from "./NavbarSearch";
+import NavbarSearch from "./NavbarSearch";
 
 type NavbarProps = {
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,16 +39,11 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   }, []);
 
   return (
-    <ul className="flex flex-row items-center gap-12 px-12 py-2 fixed top-0 left-0 w-full h-20 bg-white z-100">
+    <ul className="flex flex-row items-center gap-12 px-12 py-2 fixed top-0 left-0 w-full h-20 bg-background">
       <li>
         <Logo />
       </li>
-      <li>
-        <div className="relative">
-          <MagnifyingGlassIcon className="absolute w-6 h-6 left-2 top-2 text-muted-foreground" />
-          <Input type="search" placeholder="Search..." className="pl-10 focus-visible:ring-transparent m-0" />
-        </div>
-      </li>
+      <NavbarSearch />
       <li className="ml-auto hover:cursor-pointer" onClick={() => setCreatingUpdate(true)}>
         <Pencil2Icon className={iconSize} />
       </li>
@@ -59,7 +59,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
         </div>
         <BellRingIcon className={iconSize} />
       </li>
-      <li>
+      <li data-hs-theme-switch="" onClick={toggleDarkMode} className="hover:cursor-pointer">
         <MoonIcon className={iconSize} />
         <SunIcon className={`hidden ${iconSize}`} />
       </li>

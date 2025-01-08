@@ -9,7 +9,7 @@ type TextAreaProps = {
 export default function TextArea({ content, setContent }: TextAreaProps) {
   const { isError, errorMessage, handleError, resetError } = useError();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let newText = e.target.value;
 
     if (newText.includes("<script>")) {
