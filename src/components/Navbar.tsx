@@ -47,7 +47,7 @@ const refreshUserWs = async () => {
 export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   const stompClientRef = useRef<Client | null>(null);
   const [friendRequestCount, setFriendRequestCount] = useState<number>(0);
-  const [notificationCount, setNotificaitonCount] = useState<number>(0);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
 
   useEffect(() => {
     const getInitialUnreadNotificationCount = async () => {
@@ -68,7 +68,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
         const data = await res.json();
 
         setFriendRequestCount(data.unreadFollowCount || 0);
-        setNotificaitonCount(data.unreadUpdateCount || 0);
+        setNotificationCount(data.unreadUpdateCount || 0);
 
         return;
       } catch (e: unknown) {
@@ -91,7 +91,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
       const msg = JSON.parse(message.body);
       console.log(msg);
 
-      setNotificaitonCount((prevCount) => prevCount + 1);
+      setNotificationCount((prevCount) => prevCount + msg.sizeOfBatch);
     };
 
     const reconnectStomp = async () => {
