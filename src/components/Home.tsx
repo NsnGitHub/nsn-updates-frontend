@@ -14,16 +14,6 @@ export default function Home() {
       <div className="mt-20">{isCreatingUpdate ? <UpdateCreate setCreatingUpdate={setCreatingUpdate} /> : <></>}</div>
       <div className="flex flex-col mt-24">
         <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
-        <UserProfile />
 
         <div className="flex flex-col w-full justify-center items-center mt-24 gap-8">
           <UpdateFeed />

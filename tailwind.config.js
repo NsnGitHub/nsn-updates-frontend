@@ -4,8 +4,12 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      width: {
+        128: "32rem",
+      },
       fontSize: {
         xxs: "0.6rem",
+        xxxs: "0.5rem",
       },
       borderRadius: {
         lg: "var(--radius)",

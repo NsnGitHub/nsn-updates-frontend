@@ -1,5 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { iconSize } from "@/constants/iconSize";
 import extractInitials from "@/util/extractInitials";
+import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 
 type UserProfileHeader = {
   username: string;
@@ -8,7 +10,7 @@ type UserProfileHeader = {
 
 export default function UserProfileHeader({ username, displayName }: UserProfileHeader) {
   return (
-    <div className="flex flex-row h-12 w-full">
+    <div className="flex flex-row h-12 w-full items-center">
       <Avatar className="h-12 w-12 -z-10">
         <AvatarFallback>{extractInitials(displayName)}</AvatarFallback>
       </Avatar>

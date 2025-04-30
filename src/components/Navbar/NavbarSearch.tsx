@@ -1,10 +1,10 @@
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { Input } from "./ui/input";
-import UserProfileHeader from "./UserProfileHeader";
+import { Input } from "../ui/input";
+import UserProfileHeader from "../UserProfileHeader";
 import { useState } from "react";
 import { useSearchQuery } from "@/lib/userQuery";
 import { useDebounce } from "@/lib/useDebounce";
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 
 export default function NavbarSearch() {
   const [searchContent, setSearchContent] = useState<string>("");

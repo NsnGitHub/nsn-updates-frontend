@@ -45,9 +45,9 @@ export default function UserProfile() {
     <>
       <div className="flex justify-center items-center w-[80ch] place-self-center border rounded-lg px-12 py-8">
         <div className="w-full flex flex-col gap-8">
-          <div className="flex flex-row">
+          <div className="flex flex-row items-center">
             <UserProfileHeader username={sampleUser.username} displayName={sampleUser.displayName} />
-            <Button className="ml-auto bg-blue-500">Follow</Button>
+            <Button className="ml-auto bg-blue-500 px-4 py-2">Follow</Button>
           </div>
 
           {sampleUser.privacySetting == "PRIVATE" ? (
@@ -74,8 +74,6 @@ export default function UserProfile() {
               </div>
             </>
           )}
-
-          {userUpdates.forEach((update) => console.log(update))}
         </div>
       </div>
     </>
