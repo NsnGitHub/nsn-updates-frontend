@@ -1,26 +1,24 @@
-import { UpdatePost } from "@/types/UpdatePost";
-import UpdatePreview from "../UpdatePreview";
-import UserFriendRequest from "../UserFriendRequest";
-import { UserProfile } from "@/types/UserProfile";
-import UserProfileHeader from "../UserProfileHeader";
+import { NotificationUpdate } from "@/types/NotificationUpdate";
+import { NotificationFollowRequest } from "@/types/NotificationFollowRequest";
+import { convertUpdateContentToPreview } from "@/util/convertUpdateContentToPreview";
 
-const sampleUpdate = {
-  id: 1,
-  content:
-    "Embrace the little moments! 🌟 Whether it's a cozy coffee break, a quiet walk, or a good book, life’s beauty is found in the simple things. Let's make today count and spread positivity wherever we go. #Gratitude #SimpleJoys #StayPositive",
-  createdAt: "",
-  numberOfLikes: 0,
-  postingUser: {
-    username: "TestAccount",
-    displayName: "Test Account",
-  },
-  isEdited: false,
-  userHasLiked: false,
-};
+// const sampleUpdate = {
+//   id: 1,
+//   content:
+//     "Embrace the little moments! 🌟 Whether it's a cozy coffee break, a quiet walk, or a good book, life’s beauty is found in the simple things. Let's make today count and spread positivity wherever we go. #Gratitude #SimpleJoys #StayPositive",
+//   createdAt: "",
+//   numberOfLikes: 0,
+//   postingUser: {
+//     username: "TestAccount",
+//     displayName: "Test Account",
+//   },
+//   isEdited: false,
+//   userHasLiked: false,
+// };
 
 type IconTypes = "notification" | "friendRequest" | "profile";
 
-type DropdownTypes = UpdatePost[] | UserProfile[] | [] | null;
+type DropdownTypes = NotificationFollowRequest[] | NotificationUpdate[] | [] | null;
 
 type IconDropdownProps = {
   children: React.ReactNode;
@@ -29,19 +27,55 @@ type IconDropdownProps = {
   type: IconTypes;
 };
 
-const createFriendRequestElement = (userProfile: UserProfile) => {
+const createFollowRequestElement = (notification: NotificationFollowRequest) => {
   return (
-    <ul>
-      <li>Friend Request Placeholder</li>
-    </ul>
+    <li key={notification.createdAt}>
+      <div className={notification.isRead == false ? "font-bold" : ""}>
+        {notification.eNotificationType == "NOTIFICATION_FOLLOW_ACCEPTED" ? (
+          <p>
+            {notification.actorUser.displayName}
+            <span className="text-gray-500"> (@{notification.actorUser.username})</span> has accepted your follow
+            request
+          </p>
+        ) : notification.eNotificationType == "NOTIFICATION_FOLLOW_PUBLIC" ? (
+          <p>
+            {notification.actorUser.displayName}
+            <span className="text-gray-500"> (@{notification.actorUser.username})</span> is now following you
+          </p>
+        ) : notification.eNotificationType == "NOTIFICATION_FOLLOW_REQUEST" ? (
+          <p>
+            {notification.actorUser.displayName}
+            <span className="text-gray-500"> (@{notification.actorUser.username})</span> has requested to follow you
+          </p>
+        ) : (
+          <></>
+        )}
+      </div>
+    </li>
   );
 };
 
-const createNotificationElement = (notification: UpdatePost) => {
+const createNotificationElement = (notification: NotificationUpdate) => {
   return (
-    <ul>
-      <li>Notification Placeholder</li>
-    </ul>
+    <li key={notification.createdAt}>
+      <div className={notification.isRead == false ? "font-bold" : ""}>
+        {notification.eNotificationType == "NOTIFICATION_FOLLOWED_POSTED" ? (
+          <p>
+            {notification.actorUser.displayName}
+            <span className="text-gray-500"> (@{notification.actorUser.username})</span> posted a new update:{" "}
+            <span className="text-blue-600">{convertUpdateContentToPreview(notification.update.content)}</span>
+          </p>
+        ) : notification.eNotificationType == "NOTIFICATION_UPDATE_LIKED" ? (
+          <p>
+            {notification.actorUser.displayName}
+            <span className="text-gray-500"> (@{notification.actorUser.username})</span> has liked your update{" "}
+            <span className="text-blue-600">{convertUpdateContentToPreview(notification.update.content)}</span>
+          </p>
+        ) : (
+          <></>
+        )}
+      </div>
+    </li>
   );
 };
 
@@ -50,11 +84,11 @@ const createDropdownComponents = (data: DropdownTypes, type: IconTypes) => {
     return <>{type}</>;
   }
   if (type === "notification") {
-    const notification = data as UpdatePost[];
-    return <div>{notification.map((n) => createNotificationElement(n))}</div>;
+    const notifications = data as NotificationUpdate[];
+    return <ul>{notifications.map((n) => createNotificationElement(n))}</ul>;
   } else {
-    const userProfiles = data as UserProfile[];
-    return <div>{userProfiles.map((u) => createFriendRequestElement(u))}</div>;
+    const notifications = data as NotificationFollowRequest[];
+    return <ul>{notifications.map((u) => createFollowRequestElement(u))}</ul>;
   }
 };
 

@@ -18,7 +18,7 @@ const notificationAPI = "http://localhost:8080/api/v1/notification";
 const refreshUserWs = async () => {
   try {
     const res = await fetch(wsAPI, {
-      method: "GET",
+      method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -46,10 +46,71 @@ const refreshUserWs = async () => {
 
 export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   const stompClientRef = useRef<Client | null>(null);
-  const [friendRequestCount, setFriendRequestCount] = useState<number>(0);
-  const [notificationCount, setNotificationCount] = useState<number>(0);
+  const [friendRequestNotificationCount, setFriendRequestNotificationCount] = useState<number>(0);
+  const [updateNotificationCount, setUpdateNotificationCount] = useState<number>(0);
+
+  const [updateNotifications, setUpdateNotifications] = useState<any>([]);
+  const [friendRequestNotifications, setFriendRequestNotifications] = useState<any>([]);
 
   useEffect(() => {
+    const getInitialFollowNotifications = async () => {
+      try {
+        const res = await fetch(`${notificationAPI}/follow/query?page=0`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) {
+          const errorRes = await res.json();
+          throw new Error(errorRes.message);
+        }
+
+        const data = await res.json();
+
+        setFriendRequestNotifications(data || []);
+
+        return;
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          throw e;
+        }
+
+        throw new Error("Unknown error has occured");
+      }
+    };
+
+    const getInitialUpdateNotifications = async () => {
+      try {
+        const res = await fetch(`${notificationAPI}/update/query?page=0`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) {
+          const errorRes = await res.json();
+          throw new Error(errorRes.message);
+        }
+
+        const data = await res.json();
+
+        setUpdateNotifications(data || []);
+
+        return;
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          throw e;
+        }
+
+        throw new Error("Unknown error has occured");
+      }
+    };
+
     const getInitialUnreadNotificationCount = async () => {
       try {
         const res = await fetch(`${notificationAPI}/unread/count`, {
@@ -67,8 +128,8 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
 
         const data = await res.json();
 
-        setFriendRequestCount(data.unreadFollowCount || 0);
-        setNotificationCount(data.unreadUpdateCount || 0);
+        setFriendRequestNotificationCount(data.unreadFollowCount || 0);
+        setUpdateNotificationCount(data.unreadUpdateCount || 0);
 
         return;
       } catch (e: unknown) {
@@ -80,18 +141,24 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
       }
     };
 
-    const onFriendRequestMessageReceived = async (message: any) => {
-      const msg = JSON.parse(message.body);
+    const OnFollowRequestMessageReceived = async (message: any) => {
+      const msg = await JSON.parse(message.body);
       console.log(msg);
 
-      setFriendRequestCount((prevCount) => prevCount + 1);
+      setFriendRequestNotificationCount((prevCount) => prevCount + 1);
+
+      // Msg is parsed into a NotificationFollowRequest
+      setFriendRequestNotifications((prevNotifications: any) => [msg, ...prevNotifications]);
     };
 
     const onNotificationMessageReceived = async (message: any) => {
-      const msg = JSON.parse(message.body);
+      const msg = await JSON.parse(message.body);
       console.log(msg);
 
-      setNotificationCount((prevCount) => prevCount + msg.sizeOfBatch);
+      setUpdateNotificationCount((prevCount) => prevCount + msg.sizeOfBatch);
+
+      // TODO: Msg here is a NotificationBatch, so we need to extract the individual notifications from the batch
+      setUpdateNotifications((prevNotifications: any) => [msg, ...prevNotifications]);
     };
 
     const reconnectStomp = async () => {
@@ -108,7 +175,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
         onConnect: () => {
           console.log("STOMP: Connected, now subscribing...");
           stompClient?.subscribe("/user/queue/notification/batch", onNotificationMessageReceived);
-          stompClient?.subscribe("/user/queue/notification/follow", onFriendRequestMessageReceived);
+          stompClient?.subscribe("/user/queue/notification/follow", OnFollowRequestMessageReceived);
         },
         onStompError: async () => {
           console.warn("STOMP ERROR - attempting to reconnect");
@@ -142,6 +209,8 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
     };
 
     getInitialUnreadNotificationCount();
+    getInitialFollowNotifications();
+    getInitialUpdateNotifications();
 
     console.log("Initializing STOMP client");
     reconnectStomp();
@@ -161,12 +230,16 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
         <Pencil2Icon className={iconSize} />
       </li>
       <li className="relative">
-        <IconDropdown alertCount={friendRequestCount} data={[]} type="friendRequest">
+        <IconDropdown
+          alertCount={friendRequestNotificationCount}
+          data={friendRequestNotifications}
+          type="friendRequest"
+        >
           <UserRoundPlusIcon className={iconSize} />
         </IconDropdown>
       </li>
       <li className="relative">
-        <IconDropdown alertCount={notificationCount} data={[]} type="notification">
+        <IconDropdown alertCount={updateNotificationCount} data={updateNotifications} type="notification">
           <BellRingIcon className={iconSize} />
         </IconDropdown>
       </li>
