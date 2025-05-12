@@ -8,6 +8,7 @@ import { getInitialThemeAndSet } from "./lib/toggleDarkMode";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BASE_API } from "./constants/baseAPI";
 import Layout from "./components/Layout";
+import UserProfile from "./components/UserProfile/UserProfile";
 
 const pingAPI = `${BASE_API}/auth/ping`;
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/user/:username" element={<UserProfile />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

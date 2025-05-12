@@ -7,4 +7,5 @@ export type TUserProfile = {
   createdAt: string;
   numberOfFollowers: number;
   numberFollowing: number;
+  bio: string;
 };
