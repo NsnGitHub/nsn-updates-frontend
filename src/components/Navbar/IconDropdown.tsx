@@ -1,12 +1,12 @@
-import { NotificationUpdate } from "@/types/NotificationUpdate";
-import { NotificationFollowRequest } from "@/types/NotificationFollowRequest";
+import { TNotificationUpdate } from "@/types/NotificationUpdate";
+import { TNotificationFollowRequest } from "@/types/NotificationFollowRequest";
 import { convertUpdateContentToPreview } from "@/util/convertUpdateContentToPreview";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import extractInitials from "@/util/extractInitials";
 
 type IconTypes = "notification" | "friendRequest" | "profile";
 
-type DropdownTypes = NotificationFollowRequest[] | NotificationUpdate[] | [] | null;
+type DropdownTypes = TNotificationFollowRequest[] | TNotificationUpdate[] | [] | null;
 
 type IconDropdownProps = {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ type IconDropdownProps = {
   type: IconTypes;
 };
 
-const createFollowRequestElement = (notification: NotificationFollowRequest) => {
+const createFollowRequestElement = (notification: TNotificationFollowRequest) => {
   return (
     <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
       <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>
@@ -50,7 +50,7 @@ const createFollowRequestElement = (notification: NotificationFollowRequest) => 
   );
 };
 
-const createNotificationElement = (notification: NotificationUpdate) => {
+const createNotificationElement = (notification: TNotificationUpdate) => {
   return (
     <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
       <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>
@@ -86,10 +86,10 @@ const createDropdownComponents = (data: DropdownTypes, type: IconTypes) => {
     return <>{type}</>;
   }
   if (type === "notification") {
-    const notifications = data as NotificationUpdate[];
+    const notifications = data as TNotificationUpdate[];
     return <ul>{notifications.map((n) => createNotificationElement(n))}</ul>;
   } else {
-    const notifications = data as NotificationFollowRequest[];
+    const notifications = data as TNotificationFollowRequest[];
     return <ul>{notifications.map((u) => createFollowRequestElement(u))}</ul>;
   }
 };

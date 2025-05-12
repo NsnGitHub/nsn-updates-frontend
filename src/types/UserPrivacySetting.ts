@@ -1,1 +1,1 @@
-export type UserPrivacySetting = "PUBLIC" | "FOLLOWERS" | "PRIVATE";
+export type TUserPrivacySetting = "PUBLIC" | "FOLLOWERS" | "PRIVATE";

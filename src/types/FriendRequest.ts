@@ -1,4 +1,4 @@
-export type FriendRequest = {
+export type TFriendRequest = {
   requesterUsername: string;
   targetUsername: string;
 };

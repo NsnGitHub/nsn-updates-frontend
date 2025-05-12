@@ -1,6 +1,4 @@
-import { BookmarkIcon } from "@radix-ui/react-icons";
 import { HouseIcon, SettingsIcon, TelescopeIcon } from "lucide-react";
-import React, { useState } from "react";
 import { iconSize } from "@/constants/iconSize";
 
 const listContainer = "flex flex-row gap-2 items-center justify-center border-b px-8 py-4";

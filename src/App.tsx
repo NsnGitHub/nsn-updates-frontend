@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { getInitialThemeAndSet } from "./lib/toggleDarkMode";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BASE_API } from "./constants/baseAPI";
+import Layout from "./components/Layout";
 
 const pingAPI = `${BASE_API}/auth/ping`;
 function App() {
@@ -20,9 +21,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
           <Route path="/login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Router>
     </QueryClientProvider>

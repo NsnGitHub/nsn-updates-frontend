@@ -1,11 +1,11 @@
-import { NotificationType } from "./NotificationType";
-import { Update } from "./Update";
-import { UserProfile } from "./UserProfile";
+import { TNotificationType } from "./NotificationType";
+import { TUpdate } from "./Update";
+import { TUserProfile } from "./UserProfile";
 
-export type NotificationUpdate = {
-  actorUser: UserProfile;
-  update: Update;
-  eNotificationType: NotificationType;
+export type TNotificationUpdate = {
+  actorUser: TUserProfile;
+  update: TUpdate;
+  eNotificationType: TNotificationType;
   isRead: true | false;
   createdAt: string;
 };

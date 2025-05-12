@@ -1,4 +1,4 @@
-export type NotificationType =
+export type TNotificationType =
   | "NOTIFICATION_FOLLOW_REQUEST"
   | "NOTIFICATION_FOLLOW_ACCEPTED"
   | "NOTIFICATION_FOLLOW_PUBLIC"

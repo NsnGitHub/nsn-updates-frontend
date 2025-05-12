@@ -1,45 +1,35 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserProfileHeader from "./UserProfileHeader";
 import { getJoinMonthYearFromDateTimeString } from "@/util/convertDateTimeString";
 import { Button } from "../ui/button";
 import Update from "../Update";
-import { UpdatePost } from "@/types/UpdatePost";
-
-const sampleUser = {
-  username: "test2",
-  displayName: "Test User",
-  // bio: "Highly motivated software developer with a deep passion for building scalable, high-performance web applications. With a strong foundation in Java and Spring Boot, I specialize in developing backend systems that are both secure and efficient. I have hands-on experience with RESTful API design, JWT-based authentication, and crafting clean, maintainable code using best practices like dependency injection and SOLID principles. My expertise also extends to database design and management, where I leverage tools like PostgreSQL and JPA/Hibernate to create efficient and scalable database structures. I’m well-versed in using Testcontainers for integration testing and ensuring code quality through rigorous unit testing. In addition to my technical skills, I’m experienced in collaborating on cross-functional teams, leading projects from conception to deployment, and continuously improving processes. I’m passionate about learning new technologies, staying current with industry trends, and applying my knowledge to solve complex problems that deliver real-world value. Always eager to take on new challenges!",
-  bio: "Hello, I am just a test user with a test bio",
-  privacySetting: "FOLLOWER",
-  createdAt: "2024-10-04T23:24:42.245991Z",
-  numberOfFollowers: 0,
-  numberFollowing: 0,
-};
+import { TUpdatePost } from "@/types/UpdatePost";
+import { TUserProfile } from "@/types/UserProfile";
 
 export default function UserProfile() {
   const [expandedBio, setExpandedBio] = useState<boolean>(false);
-  const [userUpdates, setUserUpdates] = useState<UpdatePost[]>([]);
+  const [user, setUser] = useState<TUserProfile | null>(null);
 
-  // useEffect(() => {
-  //   const fetchUpdates = async () => {
-  //     const baseAPI = `http://localhost:8080/api/v1/update/user/${sampleUser.username}`;
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const baseAPI = `http://localhost:8080/api/v1/update/user/${sampleUser.username}`;
 
-  //     try {
-  //       const res = await fetch(baseAPI, {
-  //         method: "GET",
-  //         credentials: "include",
-  //       });
+      try {
+        const res = await fetch(baseAPI, {
+          method: "GET",
+          credentials: "include",
+        });
 
-  //       const data = await res.json();
-  //       setUserUpdates(data);
-  //       return res;
-  //     } catch (e: unknown) {
-  //       console.log(e);
-  //     }
-  //   };
+        const data = await res.json();
+        setUserUpdates(data);
+        return res;
+      } catch (e: unknown) {
+        console.log(e);
+      }
+    };
 
-  //   fetchUpdates();
-  // }, []);
+    fetchUserProfile();
+  }, []);
 
   return (
     <>

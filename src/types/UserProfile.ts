@@ -1,9 +1,9 @@
-import { UserPrivacySetting } from "./UserPrivacySetting";
+import { TUserPrivacySetting } from "./UserPrivacySetting";
 
-export type UserProfile = {
+export type TUserProfile = {
   username: string;
   displayName: string;
-  privacySetting: UserPrivacySetting;
+  privacySetting: TUserPrivacySetting;
   createdAt: string;
   numberOfFollowers: number;
   numberFollowing: number;

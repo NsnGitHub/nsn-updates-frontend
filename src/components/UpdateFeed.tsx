@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Update from "./Update";
-import { UpdatePost } from "@/types/UpdatePost";
+import { TUpdatePost } from "@/types/UpdatePost";
 
 export default function UpdateFeed() {
-  const [updates, setUpdates] = useState<UpdatePost[]>([]);
+  const [updates, setUpdates] = useState<TUpdatePost[]>([]);
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -32,7 +32,7 @@ export default function UpdateFeed() {
   return (
     <>
       {updates.length > 0 ? (
-        updates.map((updatePost: UpdatePost) => (
+        updates.map((updatePost: TUpdatePost) => (
           <Update
             key={updatePost.id}
             id={updatePost.id}
@@ -46,7 +46,10 @@ export default function UpdateFeed() {
           />
         ))
       ) : (
-        <div>No posts to display</div>
+        <div className="flex flex-col justify-center items-center">
+          <div>Looks empty in here</div>
+          <div>Start following users to see their latest posts here</div>
+        </div>
       )}
     </>
   );

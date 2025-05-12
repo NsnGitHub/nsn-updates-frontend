@@ -1,4 +1,4 @@
-export type Update = {
+export type TUpdate = {
   id: number;
   content: string;
   createdAt: string;

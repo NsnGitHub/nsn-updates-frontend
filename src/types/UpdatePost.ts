@@ -1,6 +1,6 @@
-import { Update } from "./Update";
+import { TUpdate } from "./Update";
 
-export type UpdatePost = Update & {
+export type TUpdatePost = TUpdate & {
   isEdited: boolean;
   editedAt: string | null;
   userHasLiked: boolean;

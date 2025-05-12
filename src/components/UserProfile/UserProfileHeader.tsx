@@ -9,7 +9,7 @@ type UserProfileHeader = {
 export default function UserProfileHeader({ username, displayName }: UserProfileHeader) {
   return (
     <div className="flex flex-row h-12 w-full items-center">
-      <Avatar className="h-12 w-12 avatarBg">
+      <Avatar className="h-12 w-12 -z-10 avatarBg">
         <AvatarFallback className="bg-transparent">{extractInitials(displayName)}</AvatarFallback>
       </Avatar>
       <div className="flex flex-col ml-4 h-12">

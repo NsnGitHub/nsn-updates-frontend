@@ -3,7 +3,7 @@ import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { iconSize } from "@/constants/iconSize";
 import { convertDateTimeString } from "@/util/convertDateTimeString";
 import UserProfileHeader from "./UserProfile/UserProfileHeader";
-import { UpdatePost } from "@/types/UpdatePost";
+import { TUpdatePost } from "@/types/UpdatePost";
 
 const likeBaseAPI = "http://localhost:8080/api/v1/like";
 
@@ -46,7 +46,7 @@ export default function Update({
   createdAt,
   isEdited,
   editedAt,
-}: UpdatePost) {
+}: TUpdatePost) {
   const [isHeartHovered, setIsHeartHovered] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(userHasLiked);
   const [sNumberOfLikes, setNumberOfLikes] = useState<number>(numberOfLikes);

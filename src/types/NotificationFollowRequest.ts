@@ -1,9 +1,9 @@
-import { UserProfile } from "./UserProfile";
-import { NotificationType } from "./NotificationType";
+import { TUserProfile } from "./UserProfile";
+import { TNotificationType } from "./NotificationType";
 
-export type NotificationFollowRequest = {
-  actorUser: UserProfile;
-  eNotificationType: NotificationType;
+export type TNotificationFollowRequest = {
+  actorUser: TUserProfile;
+  eNotificationType: TNotificationType;
   isRead: true | false;
   createdAt: string;
 };
