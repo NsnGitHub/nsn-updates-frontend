@@ -1,11 +1,11 @@
 import { UpdatePost } from "@/types/UpdatePost";
 import { convertUpdateContentToPreview } from "@/util/convertUpdateContentToPreview";
 
-export default function UpdatePreview({ update }: UpdatePost) {
+export default function UpdatePreview({ postingUser, content }: UpdatePost) {
   return (
     <div>
-      <b>{update.postingUser.displayName} shared an update</b>
-      <p>"{convertUpdateContentToPreview(update.content)}"</p>
+      <b>{postingUser.displayName} shared an update</b>
+      <p>"{convertUpdateContentToPreview(content)}"</p>
     </div>
   );
 }

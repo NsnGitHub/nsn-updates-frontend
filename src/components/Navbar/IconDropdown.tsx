@@ -1,20 +1,8 @@
 import { NotificationUpdate } from "@/types/NotificationUpdate";
 import { NotificationFollowRequest } from "@/types/NotificationFollowRequest";
 import { convertUpdateContentToPreview } from "@/util/convertUpdateContentToPreview";
-
-// const sampleUpdate = {
-//   id: 1,
-//   content:
-//     "Embrace the little moments! 🌟 Whether it's a cozy coffee break, a quiet walk, or a good book, life’s beauty is found in the simple things. Let's make today count and spread positivity wherever we go. #Gratitude #SimpleJoys #StayPositive",
-//   createdAt: "",
-//   numberOfLikes: 0,
-//   postingUser: {
-//     username: "TestAccount",
-//     displayName: "Test Account",
-//   },
-//   isEdited: false,
-//   userHasLiked: false,
-// };
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+import extractInitials from "@/util/extractInitials";
 
 type IconTypes = "notification" | "friendRequest" | "profile";
 
@@ -29,8 +17,15 @@ type IconDropdownProps = {
 
 const createFollowRequestElement = (notification: NotificationFollowRequest) => {
   return (
-    <li key={notification.createdAt}>
-      <div className={notification.isRead == false ? "font-bold" : ""}>
+    <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
+      <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>
+        <div>
+          <Avatar className="h-8 w-8 avatarBg rounded-full flex items-center justify-center text-xs flex-shrink-0">
+            <AvatarFallback className="bg-transparent">
+              {extractInitials(notification.actorUser.displayName)}
+            </AvatarFallback>
+          </Avatar>
+        </div>
         {notification.eNotificationType == "NOTIFICATION_FOLLOW_ACCEPTED" ? (
           <p>
             {notification.actorUser.displayName}
@@ -57,8 +52,15 @@ const createFollowRequestElement = (notification: NotificationFollowRequest) => 
 
 const createNotificationElement = (notification: NotificationUpdate) => {
   return (
-    <li key={notification.createdAt}>
-      <div className={notification.isRead == false ? "font-bold" : ""}>
+    <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
+      <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>
+        <div>
+          <Avatar className="m-0 p-0 h-8 w-8 avatarBg rounded-full flex items-center justify-center text-xs flex-shrink-0">
+            <AvatarFallback className="bg-transparent">
+              {extractInitials(notification.actorUser.displayName)}
+            </AvatarFallback>
+          </Avatar>
+        </div>
         {notification.eNotificationType == "NOTIFICATION_FOLLOWED_POSTED" ? (
           <p>
             {notification.actorUser.displayName}
@@ -116,7 +118,7 @@ export default function IconDropdown({ children, data, alertCount, type }: IconD
             </ul>
           </div>
         ) : (
-          <div className="absolute hidden group-focus:block group-hover:block bg-white border rounded shadow-sm p-4 right-0 z-1 w-96 max-h-96 left-1/2 -translate-x-1/2 overflow-y-scroll">
+          <div className="absolute hidden group-focus:block group-hover:block bg-white border rounded shadow-sm m-0 p-0 right-0 z-1 w-96 max-h-96 left-1/2 -translate-x-1/2 overflow-y-scroll">
             {createDropdownComponents(data, type)}
           </div>
         )}

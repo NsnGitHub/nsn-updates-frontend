@@ -64,4 +64,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  .avatarBg {
+    @apply bg-gray-200 font-semibold;
+  }
 }
