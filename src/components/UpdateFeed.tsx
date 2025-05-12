@@ -1,21 +1,9 @@
 import { useEffect, useState } from "react";
 import Update from "./Update";
-
-type Update = {
-  id: number;
-  content: string;
-  createdAt: string;
-  numberOfLikes: number;
-  postingUser: {
-    username: string;
-    displayName: string;
-  };
-  isEdited: boolean;
-  userHasLiked: boolean;
-};
+import { UpdatePost } from "@/types/UpdatePost";
 
 export default function UpdateFeed() {
-  const [updates, setUpdates] = useState<Update[]>([]);
+  const [updates, setUpdates] = useState<UpdatePost[]>([]);
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -28,6 +16,9 @@ export default function UpdateFeed() {
         });
 
         const data = await res.json();
+
+        console.log(data);
+
         setUpdates(data);
         return res;
       } catch (e: unknown) {
@@ -41,7 +32,19 @@ export default function UpdateFeed() {
   return (
     <>
       {updates.length > 0 ? (
-        updates.map((updatePost) => <Update key={updatePost.id} update={updatePost} />)
+        updates.map((updatePost: UpdatePost) => (
+          <Update
+            key={updatePost.id}
+            id={updatePost.id}
+            content={updatePost.content}
+            postingUser={updatePost.postingUser}
+            numberOfLikes={updatePost.numberOfLikes}
+            userHasLiked={updatePost.userHasLiked}
+            createdAt={updatePost.createdAt}
+            isEdited={updatePost.isEdited}
+            editedAt={updatePost?.editedAt}
+          />
+        ))
       ) : (
         <div>No posts to display</div>
       )}

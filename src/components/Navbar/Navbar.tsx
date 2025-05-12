@@ -5,8 +5,8 @@ import { iconSize } from "@/constants/iconSize";
 import { Client } from "@stomp/stompjs";
 import { useEffect, useRef, useState } from "react";
 import { toggleDarkMode } from "@/lib/toggleDarkMode";
-import NavbarSearch from "./Navbar/NavbarSearch";
-import IconDropdown from "./Navbar/IconDropdown";
+import NavbarSearch from "./NavbarSearch";
+import IconDropdown from "./IconDropdown";
 
 type NavbarProps = {
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;

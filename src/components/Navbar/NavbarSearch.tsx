@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Input } from "../ui/input";
-import UserProfileHeader from "../UserProfileHeader";
+import UserProfileHeader from "../UserProfile/UserProfileHeader";
 import { useState } from "react";
 import { useSearchQuery } from "@/lib/userQuery";
 import { useDebounce } from "@/lib/useDebounce";

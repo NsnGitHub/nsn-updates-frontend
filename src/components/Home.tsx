@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Navbar from "./Navbar";
-import UpdateCreate from "./UpdateCreate";
+import Navbar from "./Navbar/Navbar";
+import UpdateCreate from "./Navbar/UpdateCreate";
 
 import UpdateFeed from "./UpdateFeed";
-import UserProfile from "./UserProfile";
+import UserProfile from "./UserProfile/UserProfile";
 
 export default function Home() {
   const [isCreatingUpdate, setCreatingUpdate] = useState<boolean>(false);

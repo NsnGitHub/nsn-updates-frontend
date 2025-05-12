@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import UserProfileHeader from "./UserProfileHeader";
 import { getJoinMonthYearFromDateTimeString } from "@/util/convertDateTimeString";
-import { Button } from "./ui/button";
-import Update from "./Update";
+import { Button } from "../ui/button";
+import Update from "../Update";
 import { UpdatePost } from "@/types/UpdatePost";
 
 const sampleUser = {

@@ -1,4 +1,4 @@
-import UserProfileHeader from "./UserProfileHeader";
+import UserProfileHeader from "./UserProfile/UserProfileHeader";
 import { iconSize } from "@/constants/iconSize";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 
