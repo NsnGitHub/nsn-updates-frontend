@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { toggleDarkMode } from "@/lib/toggleDarkMode";
 import NavbarSearch from "./NavbarSearch";
 import IconDropdown from "./IconDropdown";
+import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 
 type NavbarProps = {
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,7 +18,7 @@ const notificationAPI = "http://localhost:8080/api/v1/notification";
 
 const refreshUserWs = async () => {
   try {
-    const res = await fetch(wsAPI, {
+    const res = await fetchWithTokenRefresh(wsAPI, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -55,7 +56,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   useEffect(() => {
     const getInitialFollowNotifications = async () => {
       try {
-        const res = await fetch(`${notificationAPI}/follow/query?page=0`, {
+        const res = await fetchWithTokenRefresh(`${notificationAPI}/follow/query?page=0`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -84,7 +85,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
 
     const getInitialUpdateNotifications = async () => {
       try {
-        const res = await fetch(`${notificationAPI}/update/query?page=0`, {
+        const res = await fetchWithTokenRefresh(`${notificationAPI}/update/query?page=0`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -113,7 +114,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
 
     const getInitialUnreadNotificationCount = async () => {
       try {
-        const res = await fetch(`${notificationAPI}/unread/count`, {
+        const res = await fetchWithTokenRefresh(`${notificationAPI}/unread/count`, {
           method: "GET",
           credentials: "include",
           headers: {

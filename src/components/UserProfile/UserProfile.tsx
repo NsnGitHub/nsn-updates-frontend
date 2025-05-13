@@ -8,6 +8,7 @@ import { TUserProfile } from "@/types/UserProfile";
 import { useParams } from "react-router-dom";
 import { BASE_API } from "@/constants/baseAPI";
 import { TFollowStatus } from "@/types/FollowStatus";
+import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 
 export default function UserProfile() {
   const { username } = useParams();
@@ -16,11 +17,11 @@ export default function UserProfile() {
   const [followStatus, setFollowStatus] = useState<TFollowStatus | null>(null);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchWithTokenRefreshUserProfile = async () => {
       const userAPI = `${BASE_API}/user/${username}`;
 
       try {
-        const res = await fetch(userAPI, {
+        const res = await fetchWithTokenRefresh(userAPI, {
           method: "GET",
           credentials: "include",
         });
@@ -33,11 +34,11 @@ export default function UserProfile() {
       }
     };
 
-    const fetchFollowStatus = async () => {
+    const fetchWithTokenRefreshFollowStatus = async () => {
       const followRequestAPI = `${BASE_API}/follow/request/status/${username}`;
 
       try {
-        const res = await fetch(followRequestAPI, {
+        const res = await fetchWithTokenRefresh(followRequestAPI, {
           method: "GET",
           credentials: "include",
         });
@@ -50,8 +51,8 @@ export default function UserProfile() {
       }
     };
 
-    fetchUserProfile();
-    fetchFollowStatus();
+    fetchWithTokenRefreshUserProfile();
+    fetchWithTokenRefreshFollowStatus();
   }, []);
 
   return (

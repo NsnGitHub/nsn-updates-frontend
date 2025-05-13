@@ -5,7 +5,7 @@ const refreshAPI = `${BASE_API}/auth/refresh`;
 
 const refreshToken = async () => {
   const res = await fetch(refreshAPI, {
-    method: "GET",
+    method: "POST",
     credentials: "include",
   });
 

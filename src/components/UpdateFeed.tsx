@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import Update from "./Update";
 import { TUpdatePost } from "@/types/UpdatePost";
+import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 
 export default function UpdateFeed() {
   const [updates, setUpdates] = useState<TUpdatePost[]>([]);
 
   useEffect(() => {
-    const fetchUpdates = async () => {
+    const fetchWithTokenRefreshUpdates = async () => {
       const baseAPI = "http://localhost:8080/api/v1/update";
 
       try {
-        const res = await fetch(baseAPI, {
+        const res = await fetchWithTokenRefresh(baseAPI, {
           method: "GET",
           credentials: "include",
         });
@@ -26,7 +27,7 @@ export default function UpdateFeed() {
       }
     };
 
-    fetchUpdates();
+    fetchWithTokenRefreshUpdates();
   }, []);
 
   return (

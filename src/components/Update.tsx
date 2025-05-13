@@ -4,12 +4,13 @@ import { iconSize } from "@/constants/iconSize";
 import { convertDateTimeString } from "@/util/convertDateTimeString";
 import UserProfileHeader from "./UserProfile/UserProfileHeader";
 import { TUpdatePost } from "@/types/UpdatePost";
+import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 
 const likeBaseAPI = "http://localhost:8080/api/v1/like";
 
 const likeUpdate = async (id: number) => {
   try {
-    const res = await fetch(`${likeBaseAPI}/${id}`, {
+    const res = await fetchWithTokenRefresh(`${likeBaseAPI}/${id}`, {
       method: "POST",
       credentials: "include",
     });
@@ -24,7 +25,7 @@ const likeUpdate = async (id: number) => {
 
 const unlikeUpdate = async (id: number) => {
   try {
-    const res = await fetch(`${likeBaseAPI}/delete/${id}`, {
+    const res = await fetchWithTokenRefresh(`${likeBaseAPI}/delete/${id}`, {
       method: "POST",
       credentials: "include",
     });

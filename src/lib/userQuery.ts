@@ -1,9 +1,9 @@
 import { BASE_API } from "@/constants/baseAPI";
-import { UserProfile } from "@/types/UserProfile";
+import { TUserProfile } from "@/types/UserProfile";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import { useQuery } from "@tanstack/react-query";
 
-type UserProfileSearchAPIResponse = UserProfile[];
+type UserProfileSearchAPIResponse = TUserProfile[];
 
 const searchUserAPI = `${BASE_API}/user/search`;
 const getUserProfilesByUsernameCriteria = async (usernameCriteria: string): Promise<UserProfileSearchAPIResponse> => {

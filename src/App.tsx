@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import UserProfile from "./components/UserProfile/UserProfile";
 
 const pingAPI = `${BASE_API}/auth/ping`;
+
 function App() {
   useEffect(() => {
     getInitialThemeAndSet();
