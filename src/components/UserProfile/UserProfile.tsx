@@ -12,8 +12,60 @@ import UpdateFeed from "../UpdateFeed";
 export default function UserProfile() {
   const { username } = useParams();
   const [expandedBio, setExpandedBio] = useState<boolean>(false);
-  const [user, setUser] = useState<TUserProfile | null>(null);
+  const [targetUser, setTargetUser] = useState<TUserProfile | null>(null);
   const [followStatus, setFollowStatus] = useState<TFollowStatus | null>(null);
+
+  const followAPI = `${BASE_API}/follow`;
+
+  const onFollowButtonClick = async () => {
+    if (followStatus === "FOLLOW_PENDING" || targetUser == null) {
+      return;
+    }
+
+    if (followStatus === "FOLLOW_FALSE") {
+      if (targetUser.privacySetting === "FOLLOWER") {
+        setFollowStatus("FOLLOW_PENDING");
+      } else {
+        setFollowStatus("FOLLOW_TRUE");
+      }
+
+      try {
+        await fetchWithTokenRefresh(`${followAPI}/request`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            targetUsername: targetUser.username,
+          }),
+        });
+      } catch (e: unknown) {
+        // If any errors, reset the state
+        setFollowStatus("FOLLOW_FALSE");
+      }
+    }
+
+    if (followStatus === "FOLLOW_TRUE") {
+      setFollowStatus("FOLLOW_FALSE");
+
+      try {
+        await fetchWithTokenRefresh(`${followAPI}/delete`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            targetUsername: targetUser.username,
+          }),
+        });
+      } catch (e: unknown) {
+        // If any errors, reset the state
+        setFollowStatus("FOLLOW_TRUE");
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchWithTokenRefreshUserProfile = async () => {
@@ -26,7 +78,7 @@ export default function UserProfile() {
         });
 
         const data = await res.json();
-        setUser(data);
+        setTargetUser(data);
         return res;
       } catch (e: unknown) {
         console.log(e);
@@ -56,17 +108,21 @@ export default function UserProfile() {
 
   return (
     <div className="mt-24 flex flex-col gap-4 justify-center items-center">
-      {user === null ? (
+      {targetUser === null ? (
         <p>This user does not exist.</p>
       ) : (
         <div className="flex justify-center items-center w-[80ch] border rounded-lg px-12 py-8">
           <div className="w-full flex flex-col gap-8">
             <div className="flex flex-row items-center">
-              <UserProfileHeader username={user.username} displayName={user.displayName} />
+              <UserProfileHeader username={targetUser.username} displayName={targetUser.displayName} />
               {followStatus === "FOLLOW_FALSE" ? (
-                <Button className="ml-auto bg-blue-500 px-4 py-2">Follow</Button>
+                <Button className="ml-auto bg-blue-500 px-4 py-2" onClick={() => onFollowButtonClick()}>
+                  Follow
+                </Button>
               ) : followStatus === "FOLLOW_TRUE" ? (
-                <Button className="ml-auto bg-red-500 px-4 py-2">Unfollow</Button>
+                <Button className="ml-auto bg-red-500 px-4 py-2" onClick={() => onFollowButtonClick()}>
+                  Unfollow
+                </Button>
               ) : (
                 <Button disabled className="ml-auto bg-blue-500 px-4 py-2">
                   Requested
@@ -74,13 +130,13 @@ export default function UserProfile() {
               )}
             </div>
 
-            {user.privacySetting == "PRIVATE" ? (
+            {targetUser.privacySetting == "PRIVATE" ? (
               <div>PRIVATE ACCOUNT</div>
             ) : (
               <>
-                {user.bio != null && user.bio.length > 250 ? (
+                {targetUser.bio != null && targetUser.bio.length > 250 ? (
                   <p>
-                    {`${!expandedBio ? `${user?.bio.slice(0, 250)}...` : user.bio}`}
+                    {`${!expandedBio ? `${targetUser?.bio.slice(0, 250)}...` : targetUser.bio}`}
                     <p
                       className="text-blue-500 mt-4 hover:cursor-pointer"
                       onClick={() => setExpandedBio((prev) => !prev)}
@@ -92,9 +148,11 @@ export default function UserProfile() {
                   <p></p>
                 )}
                 <div className="flex flex-row gap-4">
-                  <span>{user.numberFollowing} Following</span>
-                  <span>{user.numberOfFollowers} Followers</span>
-                  <span className="ml-auto">{`Joined ${getJoinMonthYearFromDateTimeString(user.createdAt)}`}</span>
+                  <span>{targetUser.numberFollowing} Following</span>
+                  <span>{targetUser.numberOfFollowers} Followers</span>
+                  <span className="ml-auto">{`Joined ${getJoinMonthYearFromDateTimeString(
+                    targetUser.createdAt
+                  )}`}</span>
                 </div>
               </>
             )}
@@ -102,10 +160,10 @@ export default function UserProfile() {
         </div>
       )}
 
-      {user !== null && user.privacySetting === "FOLLOWER" ? (
-        <p>Follow {user.displayName} to see their posts!</p>
-      ) : user?.privacySetting === "PUBLIC" ? (
-        <UpdateFeed username={user.username} />
+      {targetUser !== null && targetUser.privacySetting === "FOLLOWER" ? (
+        <p>Follow {targetUser.displayName} to see their posts!</p>
+      ) : targetUser?.privacySetting === "PUBLIC" ? (
+        <UpdateFeed username={targetUser.username} />
       ) : (
         <></>
       )}
