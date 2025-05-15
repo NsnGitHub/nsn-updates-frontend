@@ -3,6 +3,9 @@ import { TNotificationFollowRequest } from "@/types/NotificationFollowRequest";
 import { convertUpdateContentToPreview } from "@/util/convertUpdateContentToPreview";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import extractInitials from "@/util/extractInitials";
+import { useUser } from "@/contexts/UserProvider";
+import { useNavigate } from "react-router-dom";
+import { BASE_API } from "@/constants/baseAPI";
 
 type IconTypes = "notification" | "friendRequest" | "profile";
 
@@ -95,6 +98,9 @@ const createDropdownComponents = (data: DropdownTypes, type: IconTypes) => {
 };
 
 export default function IconDropdown({ children, data, alertCount, type }: IconDropdownProps) {
+  const { setUser } = useUser();
+  const navigate = useNavigate();
+
   return (
     <div className="flex items-center justify-center">
       <div className="relative group inline-block h-full">
@@ -112,7 +118,17 @@ export default function IconDropdown({ children, data, alertCount, type }: IconD
               <li className="hover:bg-gray-100 hover:cursor-pointer w-full py-2 flex items-center justify-center text-black">
                 Profile
               </li>
-              <li className="hover:bg-gray-100 hover:cursor-pointer w-full py-2 flex items-center justify-center text-black">
+              <li
+                className="hover:bg-gray-100 hover:cursor-pointer w-full py-2 flex items-center justify-center text-black"
+                onClick={async () => {
+                  setUser(null);
+                  navigate("/login");
+                  await fetch(`${BASE_API}/auth/logout`, {
+                    method: "POST",
+                    credentials: "include",
+                  });
+                }}
+              >
                 Logout
               </li>
             </ul>

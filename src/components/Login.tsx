@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useError from "@/lib/useError";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "@/contexts/UserProvider";
 
 type LoginData = {
   username: string;
@@ -41,6 +42,14 @@ export default function Login() {
   const { isError, errorMessage, handleError } = useError();
 
   const navigate = useNavigate();
+
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleLoginDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
