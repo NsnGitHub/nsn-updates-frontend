@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import UserProfileHeader from "./UserProfileHeader";
 import { getJoinMonthYearFromDateTimeString } from "@/util/convertDateTimeString";
 import { Button } from "../ui/button";
-import Update from "../Update";
-import { TUpdatePost } from "@/types/UpdatePost";
 import { TUserProfile } from "@/types/UserProfile";
 import { useParams } from "react-router-dom";
 import { BASE_API } from "@/constants/baseAPI";
 import { TFollowStatus } from "@/types/FollowStatus";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
+import UpdateFeed from "../UpdateFeed";
 
 export default function UserProfile() {
   const { username } = useParams();
@@ -60,7 +59,7 @@ export default function UserProfile() {
       {user === null ? (
         <p>This user does not exist.</p>
       ) : (
-        <div className="flex justify-center items-center w-[80ch] place-self-center border rounded-lg px-12 py-8">
+        <div className="flex justify-center items-center w-[80ch] border rounded-lg px-12 py-8">
           <div className="w-full flex flex-col gap-8">
             <div className="flex flex-row items-center">
               <UserProfileHeader username={user.username} displayName={user.displayName} />
@@ -103,10 +102,10 @@ export default function UserProfile() {
         </div>
       )}
 
-      {user?.privacySetting === "FOLLOWER" ? (
+      {user !== null && user.privacySetting === "FOLLOWER" ? (
         <p>Follow {user.displayName} to see their posts!</p>
       ) : user?.privacySetting === "PUBLIC" ? (
-        <>Posts go here</>
+        <UpdateFeed username={user.username} />
       ) : (
         <></>
       )}

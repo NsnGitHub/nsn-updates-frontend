@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TextArea from "./UpdateCreate/TextArea";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { BASE_API } from "@/constants/baseAPI";
+import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 
 type UpdateCreateProps = {
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,7 +12,7 @@ const createUpdate = async (content: string) => {
   const createUpdateAPI = `${BASE_API}/update/create`;
 
   try {
-    const res = await fetch(createUpdateAPI, {
+    const res = await fetchWithTokenRefresh(createUpdateAPI, {
       method: "POST",
       credentials: "include",
       headers: {

@@ -4,13 +4,17 @@ import { useNavigate } from "react-router-dom";
 const refreshAPI = `${BASE_API}/auth/refresh`;
 
 const refreshToken = async () => {
-  const res = await fetch(refreshAPI, {
-    method: "POST",
-    credentials: "include",
-  });
+  try {
+    const res = await fetch(refreshAPI, {
+      method: "POST",
+      credentials: "include",
+    });
 
-  if (res.ok) {
-    return true;
+    if (res.ok) {
+      return true;
+    }
+  } catch (e: unknown) {
+    console.log(e);
   }
 
   return false;
@@ -27,7 +31,7 @@ const fetchWithTokenRefresh = async (url: string, options: {} = {}) => {
       navigate("/login");
     }
 
-    res = await fetch(url, { ...options });
+    res = await fetchWithTokenRefresh(url, { ...options });
   }
 
   return res;

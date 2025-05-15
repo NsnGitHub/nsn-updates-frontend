@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
-import { iconSize } from "@/constants/iconSize";
 import { convertDateTimeString } from "@/util/convertDateTimeString";
 import UserProfileHeader from "./UserProfile/UserProfileHeader";
 import { TUpdatePost } from "@/types/UpdatePost";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
+import { TUserProfile } from "@/types/UserProfile";
+
+const heartIconSize = "w-5 h-5";
 
 const likeBaseAPI = "http://localhost:8080/api/v1/like";
 
@@ -47,7 +49,8 @@ export default function Update({
   createdAt,
   isEdited,
   editedAt,
-}: TUpdatePost) {
+  currentUser,
+}: TUpdatePost & { currentUser: TUserProfile | null }) {
   const [isHeartHovered, setIsHeartHovered] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(userHasLiked);
   const [sNumberOfLikes, setNumberOfLikes] = useState<number>(numberOfLikes);
@@ -68,15 +71,17 @@ export default function Update({
     <div className="border py-8 px-8 rounded-md flex flex-col gap-8">
       <UserProfileHeader username={postingUser.username} displayName={postingUser.displayName} />
       <div>
-        <p className="w-[80ch] text-xl">{content}</p>
+        <p className="w-[80ch] text-l">{content}</p>
       </div>
-      <div className="flex flex-row w-full">
+      <div className="flex flex-row w-full mt-4">
         <div
           className="flex flex-row items-center gap-1"
           onMouseEnter={() => setIsHeartHovered(true)}
           onMouseLeave={() => setIsHeartHovered(false)}
         >
-          {isLiked ? (
+          {currentUser?.username === postingUser.username ? (
+            <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
+          ) : isLiked ? (
             <div
               className="hover:cursor-pointer hover:scale-120 active:scale-90"
               onClick={() => {
@@ -85,7 +90,11 @@ export default function Update({
                 unlikeUpdate(id);
               }}
             >
-              {!isHeartHovered ? <HeartFilledIcon className={iconSize} /> : <HeartIcon className={iconSize} />}
+              {!isHeartHovered ? (
+                <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
+              ) : (
+                <HeartIcon className="w-6 h-6" />
+              )}
             </div>
           ) : (
             <div
@@ -96,13 +105,17 @@ export default function Update({
                 likeUpdate(id);
               }}
             >
-              {!isHeartHovered ? <HeartIcon className={iconSize} /> : <HeartFilledIcon className={iconSize} />}
+              {!isHeartHovered ? (
+                <HeartIcon className={heartIconSize} />
+              ) : (
+                <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
+              )}
             </div>
           )}
-          <span className="text-md">{sNumberOfLikes}</span>
+          <span className="text-sm">{sNumberOfLikes}</span>
         </div>
         <div className="p-0 m-0 ml-auto flex justify-center items-center">
-          <span className="text-md text-gray-400">{convertDateTimeString(createdAt)}</span>
+          <span className="text-sm text-gray-400">{convertDateTimeString(createdAt)}</span>
         </div>
       </div>
     </div>

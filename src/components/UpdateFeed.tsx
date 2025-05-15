@@ -1,37 +1,76 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Update from "./Update";
 import { TUpdatePost } from "@/types/UpdatePost";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
+import Spinner from "./Spinner";
+import { useUser } from "@/contexts/UserProvider";
 
-export default function UpdateFeed() {
+export default function UpdateFeed({ username }: { username: string }) {
   const [updates, setUpdates] = useState<TUpdatePost[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const [hasMoreData, setHasMoreData] = useState<boolean>(true);
+
+  const { user } = useUser();
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  const loaderRef = useRef(null);
+
+  const getUpdates = useCallback(async () => {
+    const updateAPI = `http://localhost:8080/api/v1/update/${username}/${page}`;
+
+    try {
+      const res = await fetchWithTokenRefresh(updateAPI, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (data.length === 0) {
+        setHasMoreData(false);
+      } else {
+        setUpdates((prev) => [...prev, ...data]);
+      }
+    } catch (e: unknown) {
+      console.log(e);
+    }
+  }, [username, page]);
 
   useEffect(() => {
-    const fetchWithTokenRefreshUpdates = async () => {
-      const baseAPI = "http://localhost:8080/api/v1/update";
+    if (!hasMoreData) {
+      return;
+    }
 
-      try {
-        const res = await fetchWithTokenRefresh(baseAPI, {
-          method: "GET",
-          credentials: "include",
-        });
+    const loader = loaderRef.current;
 
-        const data = await res.json();
+    if (observer.current) {
+      observer.current.disconnect();
+    } else {
+      observer.current = new IntersectionObserver((elements) => {
+        if (elements[0].isIntersecting) {
+          setPage((prev) => (prev += 1));
+        }
+      });
+    }
 
-        console.log(data);
+    if (loader) {
+      observer.current.observe(loader);
+    }
 
-        setUpdates(data);
-        return res;
-      } catch (e: unknown) {
-        console.log(e);
+    return () => {
+      if (loader) {
+        observer.current?.unobserve(loader);
       }
     };
+  }, [hasMoreData]);
 
-    fetchWithTokenRefreshUpdates();
-  }, []);
+  useEffect(() => {
+    getUpdates();
+  }, [getUpdates]);
 
   return (
-    <>
+    <div className="flex flex-col border px-4 gap-4 rounded-lg w-[80ch]">
+      <div className="mt-4 text-lg font-semibold text-gray-800">Updates</div>
       {updates.length > 0 ? (
         updates.map((updatePost: TUpdatePost) => (
           <Update
@@ -44,6 +83,7 @@ export default function UpdateFeed() {
             createdAt={updatePost.createdAt}
             isEdited={updatePost.isEdited}
             editedAt={updatePost?.editedAt}
+            currentUser={user}
           />
         ))
       ) : (
@@ -52,6 +92,11 @@ export default function UpdateFeed() {
           <div>Start following users to see their latest posts here</div>
         </div>
       )}
-    </>
+      {hasMoreData && (
+        <div ref={loaderRef} className="my-24">
+          <Spinner />
+        </div>
+      )}
+    </div>
   );
 }
