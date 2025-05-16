@@ -136,7 +136,7 @@ export default function Update({
           </div>
         </div>
       </div>
-      {isEditing && <UpdateCreate setCreatingUpdate={setIsEditing} initialContent={content} />}
+      {isEditing && <UpdateCreate setCreatingUpdate={setIsEditing} initialContent={content} id={id} />}
     </>
   );
 }

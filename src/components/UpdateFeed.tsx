@@ -16,6 +16,8 @@ export default function UpdateFeed({ username }: { username: string }) {
   const observer = useRef<IntersectionObserver | null>(null);
   const loaderRef = useRef(null);
 
+  const pageDataMap = useRef<Map<number, TUpdatePost[]>>(new Map());
+
   useEffect(() => {
     if (!hasMoreData) {
       return;
@@ -59,7 +61,12 @@ export default function UpdateFeed({ username }: { username: string }) {
         if (data.length === 0) {
           setHasMoreData(false);
         } else {
-          setUpdates((prev) => [...prev, ...data]);
+          pageDataMap.current.set(page, data);
+
+          const sortedPages = Array.from(pageDataMap.current.keys()).sort((a, b) => a - b);
+          const merged = sortedPages.flatMap((i) => pageDataMap.current.get(i) || []);
+
+          setUpdates(merged);
         }
       } catch (e: unknown) {
         console.log(e);

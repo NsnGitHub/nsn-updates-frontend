@@ -13,6 +13,8 @@ export default function Notifications() {
   const observer = useRef<IntersectionObserver | null>(null);
   const loaderRef = useRef(null);
 
+  const pageDataMap = useRef<Map<number, TNotificationUpdate[]>>(new Map());
+
   useEffect(() => {
     if (!hasMoreData) {
       return;
@@ -56,7 +58,12 @@ export default function Notifications() {
         if (data.length === 0) {
           setHasMoreData(false);
         } else {
-          setNotifications((prev) => [...prev, ...data]);
+          pageDataMap.current.set(page, data);
+
+          const sortedPages = Array.from(pageDataMap.current.keys()).sort((a, b) => a - b);
+          const merged = sortedPages.flatMap((i) => pageDataMap.current.get(i) || []);
+
+          setNotifications((prev) => merged);
         }
       } catch (e: unknown) {
         console.log(e);

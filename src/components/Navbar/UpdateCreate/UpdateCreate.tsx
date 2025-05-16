@@ -1,25 +1,29 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TextArea from "./TextArea";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { BASE_API } from "@/constants/baseAPI";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 
 type UpdateCreateProps = {
-  initialContent: string;
+  initialContent: string | "";
+  id: number | null;
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const createUpdate = async (content: string) => {
-  const createUpdateAPI = `${BASE_API}/update/create`;
+const createUpdate = async (content: string, id: number | null) => {
+  const createUpdateAPI = `${BASE_API}/update/put`;
 
   try {
     const res = await fetchWithTokenRefresh(createUpdateAPI, {
-      method: "POST",
+      method: "PUT",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ content: content }),
+      body: JSON.stringify({
+        id: id,
+        content: content,
+      }),
     });
 
     if (!res.ok) {
@@ -37,8 +41,8 @@ const createUpdate = async (content: string) => {
   }
 };
 
-export default function UpdateCreate({ initialContent, setCreatingUpdate }: UpdateCreateProps) {
-  const [updateContent, setUpdateContent] = useState(initialContent);
+export default function UpdateCreate({ initialContent, id, setCreatingUpdate }: UpdateCreateProps) {
+  const [updateContent, setUpdateContent] = useState<string | "">(initialContent);
 
   return (
     <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-30">
@@ -51,7 +55,10 @@ export default function UpdateCreate({ initialContent, setCreatingUpdate }: Upda
         </div>
         <div className="flex flex-row items-center justify-between px-16 w-full">
           <span>{1000 - updateContent.length}</span>
-          <button className="rounded-md px-4 py-2 bg-blue-500 text-white" onClick={() => createUpdate(updateContent)}>
+          <button
+            className="rounded-md px-4 py-2 bg-blue-500 text-white"
+            onClick={() => createUpdate(updateContent, id)}
+          >
             Create
           </button>
         </div>

@@ -13,6 +13,8 @@ export default function Social() {
   const observer = useRef<IntersectionObserver | null>(null);
   const loaderRef = useRef(null);
 
+  const pageDataMap = useRef<Map<number, TNotificationFollowRequest[]>>(new Map());
+
   useEffect(() => {
     if (!hasMoreData) {
       return;
@@ -57,7 +59,12 @@ export default function Social() {
         if (data.length === 0) {
           setHasMoreData(false);
         } else {
-          setFollowNotifications((prev) => [...prev, ...data]);
+          pageDataMap.current.set(page, data);
+
+          const sortedPages = Array.from(pageDataMap.current.keys()).sort((a, b) => a - b);
+          const merged = sortedPages.flatMap((i) => pageDataMap.current.get(i) || []);
+
+          setFollowNotifications(merged);
         }
       } catch (e: unknown) {
         console.log(e);
