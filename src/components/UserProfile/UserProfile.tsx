@@ -104,7 +104,7 @@ export default function UserProfile() {
 
     fetchWithTokenRefreshUserProfile();
     fetchWithTokenRefreshFollowStatus();
-  }, []);
+  }, [username]);
 
   return (
     <div className="mt-24 flex flex-col gap-4 justify-center items-center">

@@ -225,7 +225,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   }, []);
 
   return (
-    <ul className="flex flex-row items-center gap-8 px-12 py-2 fixed top-0 left-0 w-full h-20 bg-background">
+    <ul className="flex flex-row items-center gap-8 z-50 px-12 py-2 fixed top-0 left-0 w-full h-20 bg-background">
       <li className="hover:cursor-pointer hover:scale-110" onClick={() => navigate("/")}>
         <Logo />
       </li>

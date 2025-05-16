@@ -73,9 +73,9 @@ export default function Notifications() {
   }, [notifications, hasMoreData]);
 
   return (
-    <div className="flex justify-center mt-24">
-      <div className="flex flex-col gap-24 items-center justify-center border rounded-lg w-[80ch]">
-        <ul>
+    <div className="flex justify-center my-24">
+      <div className="border rounded-lg w-[80ch]">
+        <ul className="flex flex-col w-full justify-center">
           {notifications.length > 0 ? (
             notifications.map((notification) => createNotificationElement(notification))
           ) : (

@@ -20,7 +20,7 @@ type IconDropdownProps = {
 
 export const createFollowRequestElement = (notification: TNotificationFollowRequest) => {
   return (
-    <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
+    <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50 w-full">
       <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>
         <div>
           <Avatar className="h-8 w-8 avatarBg rounded-full flex items-center justify-center text-xs flex-shrink-0">

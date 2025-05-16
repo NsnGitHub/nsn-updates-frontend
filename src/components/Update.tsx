@@ -75,7 +75,7 @@ export default function Update({
     <>
       <div className="border py-8 px-8 rounded-md flex flex-col gap-8">
         <div className="flex flex-row items-center">
-          {currentUser && <UserProfileHeader username={currentUser.username} displayName={currentUser.displayName} />}
+          {postingUser && <UserProfileHeader username={postingUser.username} displayName={postingUser.displayName} />}
           {currentUser?.username === postingUser.username ? (
             <Button
               className="ml-auto bg-gray-200 px-4 py-2 text-black hover:bg-gray-100"

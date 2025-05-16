@@ -74,9 +74,9 @@ export default function Social() {
   }, [followNotifications, hasMoreData]);
 
   return (
-    <div className="flex justify-center mt-24">
-      <div className="flex flex-col items-center justify-center border rounded-lg w-[80ch]">
-        <ul>
+    <div className="flex justify-center my-24">
+      <div className="border rounded-lg w-[80ch]">
+        <ul className="flex flex-col w-full justify-center">
           {followNotifications.length > 0 ? (
             followNotifications.map((notification) => createFollowRequestElement(notification))
           ) : (
