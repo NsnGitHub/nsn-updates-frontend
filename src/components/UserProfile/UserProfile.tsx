@@ -160,9 +160,9 @@ export default function UserProfile() {
         </div>
       )}
 
-      {targetUser !== null && targetUser.privacySetting === "FOLLOWER" ? (
+      {targetUser !== null && targetUser.privacySetting === "FOLLOWER" && followStatus != "FOLLOW_TRUE" ? (
         <p>Follow {targetUser.displayName} to see their posts!</p>
-      ) : targetUser?.privacySetting === "PUBLIC" ? (
+      ) : (targetUser && targetUser.privacySetting === "PUBLIC") || (targetUser && followStatus === "FOLLOW_TRUE") ? (
         <UpdateFeed username={targetUser.username} />
       ) : (
         <></>

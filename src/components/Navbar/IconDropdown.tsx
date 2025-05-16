@@ -85,15 +85,34 @@ export const createNotificationElement = (notification: TNotificationUpdate) => 
 };
 
 const createDropdownComponents = (data: DropdownTypes, type: IconTypes) => {
+  const navigate = useNavigate();
+
   if (data === null || data.length === 0) {
     return <>{type}</>;
   }
   if (type === "notification") {
     const notifications = data as TNotificationUpdate[];
-    return <ul>{notifications.map((n) => createNotificationElement(n))}</ul>;
+    return (
+      <ul>
+        {notifications.map((n) => createNotificationElement(n))}
+        <li
+          className="flex items-center justify-center py-4 hover:bg-gray-50"
+          onClick={() => navigate("/notification")}
+        >
+          View All
+        </li>
+      </ul>
+    );
   } else {
     const notifications = data as TNotificationFollowRequest[];
-    return <ul>{notifications.map((u) => createFollowRequestElement(u))}</ul>;
+    return (
+      <ul>
+        {notifications.map((u) => createFollowRequestElement(u))}
+        <li className="flex items-center justify-center py-4 hover:bg-gray-50" onClick={() => navigate("/social")}>
+          View All
+        </li>
+      </ul>
+    );
   }
 };
 
