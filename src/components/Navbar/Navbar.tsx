@@ -162,7 +162,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
       setUpdateNotificationCount((prevCount) => prevCount + msg.sizeOfBatch);
 
       // TODO: Msg here is a NotificationBatch, so we need to extract the individual notifications from the batch
-      setUpdateNotifications((prevNotifications: any) => [msg, ...prevNotifications]);
+      setUpdateNotifications((prevNotifications: any) => [...msg.notificationDtoList, ...prevNotifications]);
     };
 
     const reconnectStomp = async () => {
