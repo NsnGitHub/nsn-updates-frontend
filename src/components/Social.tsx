@@ -22,6 +22,7 @@ export default function Social() {
       observer.current.disconnect();
     } else {
       observer.current = new IntersectionObserver((elements) => {
+        console.log("Intersection Observed");
         if (elements[0].isIntersecting) {
           setPage((prev) => prev + 1);
         }
@@ -65,6 +66,12 @@ export default function Social() {
 
     getNotifications();
   }, [page]);
+
+  useEffect(() => {
+    if (hasMoreData && document.body.scrollHeight <= window.innerHeight) {
+      setPage((prev) => prev + 1);
+    }
+  }, [followNotifications, hasMoreData]);
 
   return (
     <div className="flex justify-center mt-24">

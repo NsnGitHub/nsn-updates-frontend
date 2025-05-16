@@ -69,9 +69,15 @@ export default function UpdateFeed({ username }: { username: string }) {
     getUpdates();
   }, [username, page]);
 
+  useEffect(() => {
+    if (hasMoreData && document.body.scrollHeight <= window.innerHeight) {
+      setPage((prev) => prev + 1);
+    }
+  }, [updates, hasMoreData]);
+
   return (
-    <div className="flex flex-col border px-4 gap-4 rounded-lg w-[80ch]">
-      <div className="mt-4 text-lg font-semibold text-gray-800">Updates</div>
+    <div className="flex flex-col border px-4 py-4 gap-4 rounded-lg w-[80ch]">
+      <div className="text-lg font-semibold text-gray-800">Updates</div>
       {updates.length > 0 ? (
         updates.map((updatePost: TUpdatePost) => (
           <Update

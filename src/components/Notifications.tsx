@@ -66,6 +66,12 @@ export default function Notifications() {
     getNotifications();
   }, [page]);
 
+  useEffect(() => {
+    if (hasMoreData && document.body.scrollHeight <= window.innerHeight) {
+      setPage((prev) => prev + 1);
+    }
+  }, [notifications, hasMoreData]);
+
   return (
     <div className="flex justify-center mt-24">
       <div className="flex flex-col gap-24 items-center justify-center border rounded-lg w-[80ch]">
