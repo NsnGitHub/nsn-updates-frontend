@@ -18,7 +18,7 @@ type IconDropdownProps = {
   type: IconTypes;
 };
 
-const createFollowRequestElement = (notification: TNotificationFollowRequest) => {
+export const createFollowRequestElement = (notification: TNotificationFollowRequest) => {
   return (
     <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
       <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>
@@ -53,7 +53,7 @@ const createFollowRequestElement = (notification: TNotificationFollowRequest) =>
   );
 };
 
-const createNotificationElement = (notification: TNotificationUpdate) => {
+export const createNotificationElement = (notification: TNotificationUpdate) => {
   return (
     <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
       <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>

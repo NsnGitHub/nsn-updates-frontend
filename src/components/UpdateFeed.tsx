@@ -4,6 +4,7 @@ import { TUpdatePost } from "@/types/UpdatePost";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import Spinner from "./Spinner";
 import { useUser } from "@/contexts/UserProvider";
+import { BASE_API } from "@/constants/baseAPI";
 
 export default function UpdateFeed({ username }: { username: string }) {
   const [updates, setUpdates] = useState<TUpdatePost[]>([]);
@@ -14,27 +15,6 @@ export default function UpdateFeed({ username }: { username: string }) {
 
   const observer = useRef<IntersectionObserver | null>(null);
   const loaderRef = useRef(null);
-
-  const getUpdates = useCallback(async () => {
-    const updateAPI = `http://localhost:8080/api/v1/update/${username}/${page}`;
-
-    try {
-      const res = await fetchWithTokenRefresh(updateAPI, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      const data = await res.json();
-
-      if (data.length === 0) {
-        setHasMoreData(false);
-      } else {
-        setUpdates((prev) => [...prev, ...data]);
-      }
-    } catch (e: unknown) {
-      console.log(e);
-    }
-  }, [username, page]);
 
   useEffect(() => {
     if (!hasMoreData) {
@@ -65,8 +45,29 @@ export default function UpdateFeed({ username }: { username: string }) {
   }, [hasMoreData]);
 
   useEffect(() => {
+    const getUpdates = async () => {
+      const updateAPI = `${BASE_API}/update/${username}/${page}`;
+
+      try {
+        const res = await fetchWithTokenRefresh(updateAPI, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (data.length === 0) {
+          setHasMoreData(false);
+        } else {
+          setUpdates((prev) => [...prev, ...data]);
+        }
+      } catch (e: unknown) {
+        console.log(e);
+      }
+    };
+
     getUpdates();
-  }, [getUpdates]);
+  }, [username, page]);
 
   return (
     <div className="flex flex-col border px-4 gap-4 rounded-lg w-[80ch]">
