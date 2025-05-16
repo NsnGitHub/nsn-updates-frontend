@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { convertDateTimeString } from "@/util/convertDateTimeString";
 import UserProfileHeader from "./UserProfile/UserProfileHeader";
 import { TUpdatePost } from "@/types/UpdatePost";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import { TUserProfile } from "@/types/UserProfile";
+import { Button } from "./ui/button";
+import UpdateCreate from "./Navbar/UpdateCreate/UpdateCreate";
 
 const heartIconSize = "w-5 h-5";
 
@@ -55,6 +57,8 @@ export default function Update({
   const [isLiked, setIsLiked] = useState<boolean>(userHasLiked);
   const [sNumberOfLikes, setNumberOfLikes] = useState<number>(numberOfLikes);
 
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   const toggleLiked = () => {
     setIsLiked((prev) => !prev);
   };
@@ -68,56 +72,71 @@ export default function Update({
   };
 
   return (
-    <div className="border py-8 px-8 rounded-md flex flex-col gap-8">
-      <UserProfileHeader username={postingUser.username} displayName={postingUser.displayName} />
-      <div>
-        <p className="w-[80ch] text-l">{content}</p>
-      </div>
-      <div className="flex flex-row w-full mt-4">
-        <div
-          className="flex flex-row items-center gap-1"
-          onMouseEnter={() => setIsHeartHovered(true)}
-          onMouseLeave={() => setIsHeartHovered(false)}
-        >
+    <>
+      <div className="border py-8 px-8 rounded-md flex flex-col gap-8">
+        <div className="flex flex-row items-center">
+          {currentUser && <UserProfileHeader username={currentUser.username} displayName={currentUser.displayName} />}
           {currentUser?.username === postingUser.username ? (
-            <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
-          ) : isLiked ? (
-            <div
-              className="hover:cursor-pointer hover:scale-120 active:scale-90"
-              onClick={() => {
-                decrementLikes();
-                toggleLiked();
-                unlikeUpdate(id);
-              }}
+            <Button
+              className="ml-auto bg-gray-200 px-4 py-2 text-black hover:bg-gray-100"
+              onClick={() => setIsEditing(true)}
             >
-              {!isHeartHovered ? (
-                <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
-              ) : (
-                <HeartIcon className="w-6 h-6" />
-              )}
-            </div>
+              Edit
+            </Button>
           ) : (
-            <div
-              className="hover:cursor-pointer hover:scale-120 active:scale-90"
-              onClick={() => {
-                incrementLikes();
-                toggleLiked();
-                likeUpdate(id);
-              }}
-            >
-              {!isHeartHovered ? (
-                <HeartIcon className={heartIconSize} />
-              ) : (
-                <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
-              )}
-            </div>
+            <></>
           )}
-          <span className="text-sm">{sNumberOfLikes}</span>
         </div>
-        <div className="p-0 m-0 ml-auto flex justify-center items-center">
-          <span className="text-sm text-gray-400">{convertDateTimeString(createdAt)}</span>
+        <div>
+          <p className="w-[80ch] text-l">{content}</p>
+        </div>
+        <div className="flex flex-row w-full mt-4">
+          <div
+            className="flex flex-row items-center gap-1"
+            onMouseEnter={() => setIsHeartHovered(true)}
+            onMouseLeave={() => setIsHeartHovered(false)}
+          >
+            {currentUser?.username === postingUser.username ? (
+              <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
+            ) : isLiked ? (
+              <div
+                className="hover:cursor-pointer hover:scale-120 active:scale-90"
+                onClick={() => {
+                  decrementLikes();
+                  toggleLiked();
+                  unlikeUpdate(id);
+                }}
+              >
+                {!isHeartHovered ? (
+                  <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
+                ) : (
+                  <HeartIcon className="w-6 h-6" />
+                )}
+              </div>
+            ) : (
+              <div
+                className="hover:cursor-pointer hover:scale-120 active:scale-90"
+                onClick={() => {
+                  incrementLikes();
+                  toggleLiked();
+                  likeUpdate(id);
+                }}
+              >
+                {!isHeartHovered ? (
+                  <HeartIcon className={heartIconSize} />
+                ) : (
+                  <HeartFilledIcon className={`text-red-600 ${heartIconSize}`} />
+                )}
+              </div>
+            )}
+            <span className="text-sm">{sNumberOfLikes}</span>
+          </div>
+          <div className="p-0 m-0 ml-auto flex justify-center items-center">
+            <span className="text-sm text-gray-400">{convertDateTimeString(createdAt)}</span>
+          </div>
         </div>
       </div>
-    </div>
+      {isEditing && <UpdateCreate setCreatingUpdate={setIsEditing} initialContent={content} />}
+    </>
   );
 }

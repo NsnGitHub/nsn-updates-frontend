@@ -9,7 +9,9 @@ export default function Layout() {
   return (
     <>
       <Navbar setCreatingUpdate={setCreatingUpdate} />
-      <div className="mt-20">{isCreatingUpdate ? <UpdateCreate setCreatingUpdate={setCreatingUpdate} /> : <></>}</div>
+      <div className="mt-20">
+        {isCreatingUpdate ? <UpdateCreate setCreatingUpdate={setCreatingUpdate} initialContent="" /> : <></>}
+      </div>
       {<Outlet />}
     </>
   );

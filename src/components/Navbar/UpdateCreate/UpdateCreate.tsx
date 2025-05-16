@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextArea from "./TextArea";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { BASE_API } from "@/constants/baseAPI";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 
 type UpdateCreateProps = {
+  initialContent: string;
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -36,11 +37,11 @@ const createUpdate = async (content: string) => {
   }
 };
 
-export default function UpdateCreate({ setCreatingUpdate }: UpdateCreateProps) {
-  const [updateContent, setUpdateContent] = useState("");
+export default function UpdateCreate({ initialContent, setCreatingUpdate }: UpdateCreateProps) {
+  const [updateContent, setUpdateContent] = useState(initialContent);
 
   return (
-    <div className="absolute top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-30">
+    <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-30">
       <div className="relative w-1/2 h-1/2 bg-gray-200 flex flex-col items-center gap-4 z-1000 rounded-md">
         <div className="absolute top-4 right-4 w-6 h-6 hover:cursor-pointer" onClick={() => setCreatingUpdate(false)}>
           <Cross1Icon width="1.5rem" height="1.5rem"></Cross1Icon>
