@@ -28,7 +28,7 @@ export default function UpdateFeed({ username }: { username: string }) {
     } else {
       observer.current = new IntersectionObserver((elements) => {
         if (elements[0].isIntersecting) {
-          setPage((prev) => (prev += 1));
+          setPage((prev) => prev + 1);
         }
       });
     }

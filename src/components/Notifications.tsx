@@ -25,7 +25,7 @@ export default function Notifications() {
     } else {
       observer.current = new IntersectionObserver((elements) => {
         if (elements[0].isIntersecting) {
-          setPage((prev) => (prev += 1));
+          setPage((prev) => prev + 1);
         }
       });
     }
@@ -69,13 +69,15 @@ export default function Notifications() {
   return (
     <div className="flex justify-center mt-24">
       <div className="flex flex-col gap-24 items-center justify-center border rounded-lg w-[80ch]">
-        {notifications.length > 0 ? (
-          notifications.map((notification) => createNotificationElement(notification))
-        ) : (
-          <div className="flex flex-col justify-center items-center">
-            <div>Nothing to see here... yet.</div>
-          </div>
-        )}
+        <ul>
+          {notifications.length > 0 ? (
+            notifications.map((notification) => createNotificationElement(notification))
+          ) : (
+            <div className="flex flex-col justify-center items-center">
+              <div>Nothing to see here... yet.</div>
+            </div>
+          )}
+        </ul>
         {hasMoreData && (
           <div ref={loaderRef}>
             <Spinner />
