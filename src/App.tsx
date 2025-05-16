@@ -9,6 +9,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Layout from "./components/Layout";
 import UserProfile from "./components/UserProfile/UserProfile";
 import { UserProvider } from "./contexts/UserProvider";
+import Notifications from "./components/Notifications";
+import Social from "./components/Social";
 
 function App() {
   useEffect(() => {
@@ -25,6 +27,8 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/user/:username" element={<UserProfile />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/social" element={<Social />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

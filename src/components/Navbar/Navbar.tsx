@@ -8,6 +8,7 @@ import { toggleDarkMode } from "@/lib/toggleDarkMode";
 import NavbarSearch from "./NavbarSearch";
 import IconDropdown from "./IconDropdown";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
+import { useNavigate } from "react-router-dom";
 
 type NavbarProps = {
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,6 +53,8 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
 
   const [updateNotifications, setUpdateNotifications] = useState<any>([]);
   const [friendRequestNotifications, setFriendRequestNotifications] = useState<any>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getInitialFollowNotifications = async () => {
@@ -222,15 +225,15 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   }, []);
 
   return (
-    <ul className="flex flex-row items-center gap-12 px-12 py-2 fixed top-0 left-0 w-full h-20 bg-background">
-      <li>
+    <ul className="flex flex-row items-center gap-8 px-12 py-2 fixed top-0 left-0 w-full h-20 bg-background">
+      <li className="hover:cursor-pointer hover:scale-110" onClick={() => navigate("/")}>
         <Logo />
       </li>
       <NavbarSearch />
-      <li className="ml-auto hover:cursor-pointer" onClick={() => setCreatingUpdate(true)}>
+      <li className="ml-auto hover:cursor-pointer hover:scale-110" onClick={() => setCreatingUpdate(true)}>
         <Pencil2Icon className={iconSize} />
       </li>
-      <li className="relative">
+      <li className="relative hover:scale-110 hover:cursor-pointer" onClick={() => navigate("/social")}>
         <IconDropdown
           alertCount={friendRequestNotificationCount}
           data={friendRequestNotifications}
@@ -239,12 +242,12 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
           <UserRoundPlusIcon className={iconSize} />
         </IconDropdown>
       </li>
-      <li className="relative">
+      <li className="relative hover:scale-110 hover:cursor-pointer" onClick={() => navigate("/notifications")}>
         <IconDropdown alertCount={updateNotificationCount} data={updateNotifications} type="notification">
           <BellRingIcon className={iconSize} />
         </IconDropdown>
       </li>
-      <li data-hs-theme-switch="" onClick={toggleDarkMode} className="hover:cursor-pointer">
+      <li data-hs-theme-switch="" onClick={toggleDarkMode} className="hover:cursor-pointer hover:scale-110">
         <MoonIcon className={iconSize} />
         <SunIcon className={`hidden ${iconSize}`} />
       </li>

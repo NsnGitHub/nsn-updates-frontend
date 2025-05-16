@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Navbar from "./Navbar/Navbar";
-import UpdateCreate from "./Navbar/UpdateCreate";
+import UpdateCreate from "./Navbar/UpdateCreate/UpdateCreate";
 import { Outlet } from "react-router-dom";
 
 export default function Layout() {
