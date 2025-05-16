@@ -30,7 +30,7 @@ export default function TextArea({ content, setContent }: TextAreaProps) {
       <textarea
         value={content}
         onChange={handleChange}
-        placeholder="..."
+        placeholder="What's happening?"
         className="resize-none w-full h-full outline-none rounded-md p-4"
       />
       {isError ? (
