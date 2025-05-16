@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Update from "./Update";
 import { TUpdatePost } from "@/types/UpdatePost";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";

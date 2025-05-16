@@ -1,5 +1,3 @@
-import UpdateFeed from "./UpdateFeed";
-
 export default function Home() {
   return (
     <>

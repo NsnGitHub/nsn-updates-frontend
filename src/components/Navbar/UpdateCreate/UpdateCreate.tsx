@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import TextArea from "./TextArea";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { BASE_API } from "@/constants/baseAPI";

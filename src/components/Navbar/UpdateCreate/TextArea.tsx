@@ -1,5 +1,4 @@
 import useError from "@/lib/useError";
-import React from "react";
 
 type TextAreaProps = {
   content: string;
