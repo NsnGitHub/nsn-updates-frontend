@@ -11,6 +11,7 @@ import UserProfile from "./components/UserProfile/UserProfile";
 import { UserProvider } from "./contexts/UserProvider";
 import Notifications from "./components/Notifications";
 import Social from "./components/Social";
+import ProfileAndSettings from "./components/ProfileAndSettings";
 
 function App() {
   useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
               <Route path="/user/:username" element={<UserProfile />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/social" element={<Social />} />
+              <Route path="/profile" element={<ProfileAndSettings />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

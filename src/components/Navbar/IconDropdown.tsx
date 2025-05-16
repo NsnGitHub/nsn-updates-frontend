@@ -115,7 +115,12 @@ export default function IconDropdown({ children, data, alertCount, type }: IconD
         {type === "profile" ? (
           <div className="absolute hidden group-focus:block group-hover:block bg-white border rounded shadow-sm p-0 m-0 right-0 z-1 w-24 max-h-96 left-1/2 -translate-x-1/2">
             <ul className="flex flex-col">
-              <li className="hover:bg-gray-100 hover:cursor-pointer w-full py-2 flex items-center justify-center text-black">
+              <li
+                className="hover:bg-gray-100 hover:cursor-pointer w-full py-2 flex items-center justify-center text-black"
+                onClick={() => {
+                  navigate("/profile");
+                }}
+              >
                 Profile
               </li>
               <li
