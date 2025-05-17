@@ -52,7 +52,8 @@ export default function Update({
   isEdited,
   editedAt,
   currentUser,
-}: TUpdatePost & { currentUser: TUserProfile | null }) {
+  onUpdate,
+}: TUpdatePost & { currentUser: TUserProfile | null; onUpdate: (update: TUpdatePost) => void }) {
   const [isHeartHovered, setIsHeartHovered] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(userHasLiked);
   const [sNumberOfLikes, setNumberOfLikes] = useState<number>(numberOfLikes);
@@ -132,11 +133,15 @@ export default function Update({
             <span className="text-sm">{sNumberOfLikes}</span>
           </div>
           <div className="p-0 m-0 ml-auto flex justify-center items-center">
-            <span className="text-sm text-gray-400">{convertDateTimeString(createdAt)}</span>
+            <span className="text-sm text-gray-400">
+              {convertDateTimeString(createdAt) + `${isEdited ? " • edited" : ""}`}
+            </span>
           </div>
         </div>
       </div>
-      {isEditing && <UpdateCreate setCreatingUpdate={setIsEditing} initialContent={content} id={id} />}
+      {isEditing && (
+        <UpdateCreate setCreatingUpdate={setIsEditing} initialContent={content} id={id} onUpdate={onUpdate} />
+      )}
     </>
   );
 }

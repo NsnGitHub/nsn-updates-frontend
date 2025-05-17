@@ -18,6 +18,10 @@ export default function UpdateFeed({ username }: { username: string }) {
 
   const pageDataMap = useRef<Map<number, TUpdatePost[]>>(new Map());
 
+  const onUpdate = (updatedPost: TUpdatePost) => {
+    setUpdates((prev) => prev.map((update) => (update.id === updatedPost.id ? updatedPost : update)));
+  };
+
   useEffect(() => {
     if (!hasMoreData) {
       return;
@@ -98,6 +102,7 @@ export default function UpdateFeed({ username }: { username: string }) {
             isEdited={updatePost.isEdited}
             editedAt={updatePost?.editedAt}
             currentUser={user}
+            onUpdate={onUpdate}
           />
         ))
       ) : (

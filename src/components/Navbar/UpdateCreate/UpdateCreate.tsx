@@ -3,14 +3,16 @@ import TextArea from "./TextArea";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { BASE_API } from "@/constants/baseAPI";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
+import { TUpdatePost } from "@/types/UpdatePost";
 
 type UpdateCreateProps = {
   initialContent: string | "";
   id: number | null;
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+  onUpdate: (update: TUpdatePost) => void;
 };
 
-const createUpdate = async (content: string, id: number | null) => {
+const createUpdate = async (content: string, id: number | null, fn: (update: TUpdatePost) => void) => {
   const createUpdateAPI = `${BASE_API}/update/put`;
 
   try {
@@ -31,7 +33,13 @@ const createUpdate = async (content: string, id: number | null) => {
       throw new Error(errorRes.message);
     }
 
-    return res;
+    const data = await res.json();
+
+    if (data.id) {
+      fn(data);
+    }
+
+    // return res;
   } catch (e: unknown) {
     if (e instanceof Error) {
       throw e;
@@ -41,7 +49,7 @@ const createUpdate = async (content: string, id: number | null) => {
   }
 };
 
-export default function UpdateCreate({ initialContent, id, setCreatingUpdate }: UpdateCreateProps) {
+export default function UpdateCreate({ initialContent, id, setCreatingUpdate, onUpdate }: UpdateCreateProps) {
   const [updateContent, setUpdateContent] = useState<string | "">(initialContent);
 
   return (
@@ -57,7 +65,7 @@ export default function UpdateCreate({ initialContent, id, setCreatingUpdate }: 
           <span>{1000 - updateContent.length}</span>
           <button
             className="rounded-md px-4 py-2 bg-blue-500 text-white"
-            onClick={() => createUpdate(updateContent, id)}
+            onClick={() => createUpdate(updateContent, id, onUpdate)}
           >
             Create
           </button>

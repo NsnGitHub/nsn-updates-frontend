@@ -2,7 +2,9 @@ const convertDateTimeString = (datetimeString: string) => {
   const date = new Date(datetimeString);
 
   const datePortion = date.toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" });
-  const timePortion = date.toLocaleTimeString("en-CA", { hour: "numeric", minute: "numeric", hour12: true });
+  let timePortion = date.toLocaleTimeString("en-CA", { hour: "numeric", minute: "numeric", hour12: true });
+
+  timePortion = timePortion.replace(/\./g, "");
 
   return `${datePortion} @ ${timePortion}`;
 };
