@@ -59,6 +59,7 @@ export default function Update({
   const [sNumberOfLikes, setNumberOfLikes] = useState<number>(numberOfLikes);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isHoveringEdit, setIsHoveringEdit] = useState<boolean>(false);
 
   const toggleLiked = () => {
     setIsLiked((prev) => !prev);
@@ -132,10 +133,18 @@ export default function Update({
             )}
             <span className="text-sm">{sNumberOfLikes}</span>
           </div>
-          <div className="p-0 m-0 ml-auto flex justify-center items-center">
-            <span className="text-sm text-gray-400">
-              {convertDateTimeString(createdAt) + `${isEdited ? " • edited" : ""}`}
-            </span>
+          <div
+            className="p-0 m-0 ml-auto flex justify-center items-center"
+            onMouseEnter={() => setIsHoveringEdit(true)}
+            onMouseLeave={() => setIsHoveringEdit(false)}
+          >
+            {isHoveringEdit && editedAt ? (
+              <span className="text-sm text-gray-400">edited {convertDateTimeString(editedAt)}</span>
+            ) : (
+              <span className="text-sm text-gray-400">
+                {convertDateTimeString(createdAt) + `${isEdited ? " • edited" : ""}`}
+              </span>
+            )}
           </div>
         </div>
       </div>
