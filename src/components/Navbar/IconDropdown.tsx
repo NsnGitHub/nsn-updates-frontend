@@ -53,7 +53,7 @@ export const createFollowRequestElement = (notification: TNotificationFollowRequ
   );
 };
 
-export const createNotificationElement = (notification: TNotificationUpdate) => {
+export const createNotificationElement = (notification: TNotificationUpdate, isPreview: boolean) => {
   return (
     <li key={notification.createdAt} className="m-0 py-4 border-b border-gray-200 hover:bg-gray-50">
       <div className={`flex flex-row px-4 gap-4 items-center ${notification.isRead == false ? "font-bold" : ""}`}>
@@ -68,13 +68,17 @@ export const createNotificationElement = (notification: TNotificationUpdate) => 
           <p>
             {notification.actorUser.displayName}
             <span className="text-gray-500"> (@{notification.actorUser.username})</span> posted a new update:{" "}
-            <span className="text-blue-600">{convertUpdateContentToPreview(notification.update.content)}</span>
+            <span className="text-blue-600">
+              {isPreview ? convertUpdateContentToPreview(notification.update.content) : notification.update.content}
+            </span>
           </p>
         ) : notification.eNotificationType == "NOTIFICATION_UPDATE_LIKED" ? (
           <p>
             {notification.actorUser.displayName}
             <span className="text-gray-500"> (@{notification.actorUser.username})</span> has liked your update{" "}
-            <span className="text-blue-600">{convertUpdateContentToPreview(notification.update.content)}</span>
+            <span className="text-blue-600">
+              {isPreview ? convertUpdateContentToPreview(notification.update.content) : notification.update.content}
+            </span>
           </p>
         ) : (
           <></>
@@ -88,13 +92,13 @@ const createDropdownComponents = (data: DropdownTypes, type: IconTypes) => {
   const navigate = useNavigate();
 
   if (data === null || data.length === 0) {
-    return <>{type}</>;
+    return <>Nothing to see here</>;
   }
   if (type === "notification") {
     const notifications = data as TNotificationUpdate[];
     return (
-      <ul>
-        {notifications.map((n) => createNotificationElement(n))}
+      <ul className=" [&>*:nth-child(even)]:bg-gray-50">
+        {notifications.map((n) => createNotificationElement(n, true))}
         <li
           className="flex items-center justify-center py-4 hover:bg-gray-50"
           onClick={() => navigate("/notification")}
@@ -106,7 +110,7 @@ const createDropdownComponents = (data: DropdownTypes, type: IconTypes) => {
   } else {
     const notifications = data as TNotificationFollowRequest[];
     return (
-      <ul>
+      <ul className=" [&>*:nth-child(even)]:bg-gray-50">
         {notifications.map((u) => createFollowRequestElement(u))}
         <li className="flex items-center justify-center py-4 hover:bg-gray-50" onClick={() => navigate("/social")}>
           View All
@@ -132,7 +136,7 @@ export default function IconDropdown({ children, data, alertCount, type }: IconD
         )}
         <div>{children}</div>
         {type === "profile" ? (
-          <div className="absolute hidden group-focus:block group-hover:block bg-white border rounded shadow-sm p-0 m-0 right-0 z-1 w-24 max-h-96 left-1/2 -translate-x-1/2">
+          <div className="absolute hidden group-focus:block group-hover:block bg-white border border-black rounded shadow-sm p-0 m-0 right-0 z-1 w-24 max-h-96 left-1/2 -translate-x-1/2">
             <ul className="flex flex-col">
               <li
                 className="hover:bg-gray-100 hover:cursor-pointer w-full py-2 flex items-center justify-center text-black"
@@ -158,7 +162,7 @@ export default function IconDropdown({ children, data, alertCount, type }: IconD
             </ul>
           </div>
         ) : (
-          <div className="absolute hidden group-focus:block group-hover:block bg-white border rounded shadow-sm m-0 p-0 right-0 z-1 w-96 max-h-96 left-1/2 -translate-x-1/2 overflow-y-scroll">
+          <div className="absolute hidden group-focus:block group-hover:block bg-white border border-black rounded shadow-sm m-0 p-0 right-0 z-1 w-96 max-h-96 left-1/2 -translate-x-1/2 overflow-y-scroll">
             {createDropdownComponents(data, type)}
           </div>
         )}

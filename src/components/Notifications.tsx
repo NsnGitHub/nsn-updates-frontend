@@ -82,9 +82,9 @@ export default function Notifications() {
   return (
     <div className="flex justify-center my-24">
       <div className="border rounded-lg w-[80ch]">
-        <ul className="flex flex-col w-full justify-center">
+        <ul className="flex flex-col w-full justify-center  [&>*:nth-child(even)]:bg-gray-50">
           {notifications.length > 0 ? (
-            notifications.map((notification) => createNotificationElement(notification))
+            notifications.map((notification) => createNotificationElement(notification, false))
           ) : (
             <div className="flex flex-col justify-center items-center">
               <div>Nothing to see here... yet.</div>

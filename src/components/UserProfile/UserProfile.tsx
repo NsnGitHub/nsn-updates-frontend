@@ -111,7 +111,7 @@ export default function UserProfile() {
       {targetUser === null ? (
         <p>This user does not exist.</p>
       ) : (
-        <div className="flex justify-center items-center w-[80ch] border rounded-lg px-12 py-8">
+        <div className="flex justify-center items-center w-[80ch] border rounded-lg px-8 py-8">
           <div className="w-full flex flex-col gap-8">
             <div className="flex flex-row items-center">
               <UserProfileHeader username={targetUser.username} displayName={targetUser.displayName} />

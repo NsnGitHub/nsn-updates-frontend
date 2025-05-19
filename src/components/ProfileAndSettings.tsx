@@ -72,7 +72,7 @@ export default function ProfileAndSettings() {
 
   return (
     <div className="mt-24 flex flex-col gap-4 items-center">
-      <div className="flex flex-col gap-4 w-[80ch] justify-center items-center border-lg px-12 py-8 border rounded-lg">
+      <div className="flex flex-col gap-4 w-[80ch] justify-center items-center border-lg px-8 py-8 border rounded-lg">
         {user && <UserProfileHeader username={user.username} displayName={user.displayName} />}
         <>
           {user != null && user.bio != null && user.bio.length > 250 ? (

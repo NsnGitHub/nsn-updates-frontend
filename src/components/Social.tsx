@@ -83,7 +83,7 @@ export default function Social() {
   return (
     <div className="flex justify-center my-24">
       <div className="border rounded-lg w-[80ch]">
-        <ul className="flex flex-col w-full justify-center">
+        <ul className="flex flex-col w-full justify-center  [&>*:nth-child(even)]:bg-gray-50">
           {followNotifications.length > 0 ? (
             followNotifications.map((notification) => createFollowRequestElement(notification))
           ) : (

@@ -106,9 +106,8 @@ export default function UpdateFeed({ username }: { username: string }) {
           />
         ))
       ) : (
-        <div className="flex flex-col justify-center items-center">
-          <div>Looks empty in here</div>
-          <div>Start following users to see their latest posts here</div>
+        <div className="flex flex-col justify-center">
+          <div>No updates yet.</div>
         </div>
       )}
       {hasMoreData && (
