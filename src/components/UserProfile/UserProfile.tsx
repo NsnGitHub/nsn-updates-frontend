@@ -145,9 +145,9 @@ export default function UserProfile() {
                     </p>
                   </p>
                 ) : (
-                  <p></p>
+                  <></>
                 )}
-                <div className="flex flex-row gap-4">
+                <div className="flex flex-row gap-4 w-full">
                   <span>{targetUser.numberFollowing} Following</span>
                   <span>{targetUser.numberOfFollowers} Followers</span>
                   <span className="ml-auto">{`Joined ${getJoinMonthYearFromDateTimeString(

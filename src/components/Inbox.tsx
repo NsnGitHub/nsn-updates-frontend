@@ -6,7 +6,7 @@ import Spinner from "./Spinner";
 import { useUser } from "@/contexts/UserProvider";
 import { BASE_API } from "@/constants/baseAPI";
 
-export default function UpdateFeed({ username }: { username: string }) {
+export default function Inbox() {
   const [updates, setUpdates] = useState<TUpdatePost[]>([]);
   const [page, setPage] = useState<number>(0);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
@@ -52,7 +52,7 @@ export default function UpdateFeed({ username }: { username: string }) {
 
   useEffect(() => {
     const getUpdates = async () => {
-      const updateAPI = `${BASE_API}/update/${username}/${page}`;
+      const updateAPI = `${BASE_API}/update/inbox/${page}`;
 
       try {
         const res = await fetchWithTokenRefresh(updateAPI, {
@@ -78,7 +78,7 @@ export default function UpdateFeed({ username }: { username: string }) {
     };
 
     getUpdates();
-  }, [username, page]);
+  }, [page]);
 
   useEffect(() => {
     if (hasMoreData && document.body.scrollHeight <= window.innerHeight) {
@@ -88,7 +88,7 @@ export default function UpdateFeed({ username }: { username: string }) {
 
   return (
     <div className="flex flex-col border px-8 py-8 gap-8 rounded-lg w-[80ch]">
-      <div className="text-lg font-semibold text-gray-800">Updates</div>
+      <div className="text-lg font-semibold text-gray-800">From Your Following</div>
       {updates.length > 0 ? (
         updates.map((updatePost: TUpdatePost) => (
           <Update
@@ -102,7 +102,7 @@ export default function UpdateFeed({ username }: { username: string }) {
             isEdited={updatePost.isEdited}
             editedAt={updatePost?.editedAt}
             currentUser={user}
-            onUpdate={onUpdate}
+            onUpdate={() => {}}
           />
         ))
       ) : (

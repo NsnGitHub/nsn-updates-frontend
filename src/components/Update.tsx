@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { convertDateTimeString } from "@/util/convertDateTimeString";
 import UserProfileHeader from "./UserProfile/UserProfileHeader";

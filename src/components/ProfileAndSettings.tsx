@@ -72,7 +72,7 @@ export default function ProfileAndSettings() {
 
   return (
     <div className="mt-24 flex flex-col gap-4 items-center">
-      <div className="flex flex-col w-[80ch] justify-center items-center border-lg px-12 py-8 border rounded-lg">
+      <div className="flex flex-col gap-4 w-[80ch] justify-center items-center border-lg px-12 py-8 border rounded-lg">
         {user && <UserProfileHeader username={user.username} displayName={user.displayName} />}
         <>
           {user != null && user.bio != null && user.bio.length > 250 ? (
@@ -85,14 +85,14 @@ export default function ProfileAndSettings() {
           ) : (
             <p></p>
           )}
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-4 w-full">
             <span>{user?.numberFollowing} Following</span>
             <span>{user?.numberOfFollowers} Followers</span>
             <span className="ml-auto">{user && `Joined ${getJoinMonthYearFromDateTimeString(user.createdAt)}`}</span>
           </div>
         </>
       </div>
-      <div className="flex flex-col border px-4 py-4 gap-4 rounded-lg w-[80ch]">
+      <div className="flex flex-col border px-8 py-8 gap-8 rounded-lg w-[80ch]">
         <div className="text-lg font-semibold text-gray-800">Settings</div>
         <div className="flex flex-row w-full">
           <label htmlFor="privacySetting">Privacy Setting:</label>

@@ -9,7 +9,7 @@ type UpdateCreateProps = {
   initialContent: string | "";
   id: number | null;
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (update: TUpdatePost) => void;
+  onUpdate: (update: TUpdatePost) => void | null;
 };
 
 const createUpdate = async (content: string, id: number | null, fn: (update: TUpdatePost) => void) => {
