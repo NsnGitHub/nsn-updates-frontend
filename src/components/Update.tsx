@@ -6,7 +6,7 @@ import { TUpdatePost } from "@/types/UpdatePost";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import { TUserProfile } from "@/types/UserProfile";
 import { Button } from "./ui/button";
-import UpdateCreate from "./Navbar/UpdateCreate/UpdateCreate";
+import UpdateCreate from "./UpdateCreate/UpdateCreate";
 
 const heartIconSize = "w-5 h-5";
 
