@@ -10,7 +10,7 @@ type TUserContext = {
 
 const UserContext = createContext<TUserContext | null>(null);
 
-export function useUser() {
+export const useUser = () => {
   const context = useContext(UserContext);
 
   if (!context) {
@@ -18,7 +18,7 @@ export function useUser() {
   }
 
   return context;
-}
+};
 
 const pingAPI = `${BASE_API}/auth/ping`;
 
