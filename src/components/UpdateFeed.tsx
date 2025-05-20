@@ -18,8 +18,16 @@ export default function UpdateFeed({ username }: { username: string }) {
 
   const pageDataMap = useRef<Map<number, TUpdatePost[]>>(new Map());
 
+  const onCreate = (createdPost: TUpdatePost) => {
+    setUpdates((prev) => [createdPost, ...prev]);
+  };
+
   const onUpdate = (updatedPost: TUpdatePost) => {
     setUpdates((prev) => prev.map((update) => (update.id === updatedPost.id ? updatedPost : update)));
+  };
+
+  const onDelete = (deletedPostId: number) => {
+    setUpdates((prev) => prev.filter((update) => update.id! !== deletedPostId));
   };
 
   useEffect(() => {
@@ -103,6 +111,7 @@ export default function UpdateFeed({ username }: { username: string }) {
             editedAt={updatePost?.editedAt}
             currentUser={user}
             onUpdate={onUpdate}
+            onDelete={onDelete}
           />
         ))
       ) : (

@@ -9,7 +9,7 @@ type UpdateCreateProps = {
   initialContent: string | "";
   id: number | null;
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (update: TUpdatePost) => void | null;
+  onUpdate: null | ((update: TUpdatePost) => void | null);
 };
 
 const createUpdate = async (content: string, id: number | null, fn: (update: TUpdatePost) => void) => {
@@ -65,7 +65,9 @@ export default function UpdateCreate({ initialContent, id, setCreatingUpdate, on
           <span>{1000 - updateContent.length}</span>
           <button
             className="rounded-md px-4 py-2 bg-blue-500 text-white"
-            onClick={() => createUpdate(updateContent, id, onUpdate)}
+            onClick={() => {
+              if (onUpdate) createUpdate(updateContent, id, onUpdate);
+            }}
           >
             Create
           </button>

@@ -7,6 +7,7 @@ import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import { TUserProfile } from "@/types/UserProfile";
 import { Button } from "./ui/button";
 import UpdateCreate from "./UpdateCreate/UpdateCreate";
+import { BASE_API } from "@/constants/baseAPI";
 
 const heartIconSize = "w-5 h-5";
 
@@ -42,6 +43,28 @@ const unlikeUpdate = async (id: number) => {
   }
 };
 
+const deleteUpdate = async (id: number) => {
+  try {
+    const res = await fetchWithTokenRefresh(`${BASE_API}/update/delete`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: `${id}`,
+        content: "DELETE",
+      }),
+    });
+
+    const data = await res.json();
+
+    return data;
+  } catch (e: unknown) {
+    console.log(e);
+  }
+};
+
 export default function Update({
   id,
   content,
@@ -53,7 +76,12 @@ export default function Update({
   editedAt,
   currentUser,
   onUpdate,
-}: TUpdatePost & { currentUser: TUserProfile | null; onUpdate: (update: TUpdatePost) => void }) {
+  onDelete,
+}: TUpdatePost & {
+  currentUser: TUserProfile | null;
+  onUpdate: null | ((update: TUpdatePost) => void);
+  onDelete: null | ((updateID: number) => void);
+}) {
   const [isHeartHovered, setIsHeartHovered] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(userHasLiked);
   const [sNumberOfLikes, setNumberOfLikes] = useState<number>(numberOfLikes);
@@ -79,12 +107,25 @@ export default function Update({
         <div className="flex flex-row items-center">
           {postingUser && <UserProfileHeader username={postingUser.username} displayName={postingUser.displayName} />}
           {currentUser?.username === postingUser.username ? (
-            <Button
-              className="ml-auto bg-gray-200 px-4 py-2 text-black hover:bg-gray-100"
-              onClick={() => setIsEditing(true)}
-            >
-              Edit
-            </Button>
+            <div className="flex flex-row gap-2">
+              <Button
+                className="ml-auto bg-gray-200 px-4 py-2 w-20 text-black hover:bg-gray-300"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </Button>
+              <Button
+                className="ml-auto bg-red-400 px-4 py-2 w-20 text-black hover:bg-red-500"
+                onClick={async () => {
+                  if (onDelete) {
+                    onDelete(id);
+                  }
+                  await deleteUpdate(id);
+                }}
+              >
+                Delete
+              </Button>
+            </div>
           ) : (
             <></>
           )}

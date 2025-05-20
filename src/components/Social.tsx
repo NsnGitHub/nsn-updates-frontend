@@ -96,7 +96,7 @@ export default function Social() {
           <div ref={loaderRef}>
             <Spinner />
           </div>
-        )}
+        )} 
       </div>
     </div>
   );
