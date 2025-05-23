@@ -8,7 +8,7 @@ type TUserUpdateContext = {
 
 const UserUpdateContext = createContext<TUserUpdateContext | null>(null);
 
-export const useUserUpdateNotification = () => {
+export const useUserUpdate = () => {
   const context = useContext(UserUpdateContext);
 
   if (!context) {
