@@ -9,10 +9,16 @@ type UpdateCreateProps = {
   initialContent: string | "";
   id: number | null;
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: null | ((update: TUpdatePost) => void | null);
+  onUpdate: null | ((update: TUpdatePost) => void);
+  onCreate: null | ((update: TUpdatePost) => void);
 };
 
-const createUpdate = async (content: string, id: number | null, fn: (update: TUpdatePost) => void) => {
+const createUpdate = async (
+  content: string,
+  id: number | null,
+  fn: null | ((update: TUpdatePost) => void),
+  fn2: null | ((update: TUpdatePost) => void)
+) => {
   const createUpdateAPI = `${BASE_API}/update/put`;
 
   try {
@@ -35,8 +41,12 @@ const createUpdate = async (content: string, id: number | null, fn: (update: TUp
 
     const data = await res.json();
 
-    if (data.id) {
+    if (fn != null) {
       fn(data);
+    }
+
+    if (fn2 != null) {
+      fn2(data);
     }
 
     // return res;
@@ -49,7 +59,7 @@ const createUpdate = async (content: string, id: number | null, fn: (update: TUp
   }
 };
 
-export default function UpdateCreate({ initialContent, id, setCreatingUpdate, onUpdate }: UpdateCreateProps) {
+export default function UpdateCreate({ initialContent, id, setCreatingUpdate, onUpdate, onCreate }: UpdateCreateProps) {
   const [updateContent, setUpdateContent] = useState<string | "">(initialContent);
 
   return (
@@ -66,10 +76,11 @@ export default function UpdateCreate({ initialContent, id, setCreatingUpdate, on
           <button
             className="rounded-md px-4 py-2 bg-blue-500 text-white"
             onClick={() => {
-              if (onUpdate) createUpdate(updateContent, id, onUpdate);
+              createUpdate(updateContent, id, onUpdate, onCreate);
+              setCreatingUpdate(false);
             }}
           >
-            Create
+            {id === null ? "Create" : "Save"}
           </button>
         </div>
       </div>

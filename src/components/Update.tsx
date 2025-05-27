@@ -190,7 +190,13 @@ export default function Update({
         </div>
       </div>
       {isEditing && (
-        <UpdateCreate setCreatingUpdate={setIsEditing} initialContent={content} id={id} onUpdate={onUpdate} />
+        <UpdateCreate
+          setCreatingUpdate={setIsEditing}
+          initialContent={content}
+          id={id}
+          onUpdate={onUpdate}
+          onCreate={null}
+        />
       )}
     </>
   );

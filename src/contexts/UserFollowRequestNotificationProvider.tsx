@@ -30,7 +30,7 @@ export default function UserFollowRequestNotificationProvider({ children }: { ch
   const addPaginatedFollowRequestNotifications = (notifications: TNotificationFollowRequest[]) => {
     setFollowRequestNotifications((prev) => {
       const prevIds = new Set(prev.map((n) => n.id));
-      const filtered = notifications.filter((notification) => !prevIds.has(notification.id));
+      const filtered = notifications.filter((n) => !prevIds.has(n.id));
       return [...prev, ...filtered];
     });
   };
