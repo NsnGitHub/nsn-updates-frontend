@@ -3,6 +3,7 @@ import { TUpdate } from "./Update";
 import { TUserProfile } from "./UserProfile";
 
 export type TNotificationUpdate = {
+  id: number;
   actorUser: TUserProfile;
   update: TUpdate;
   eNotificationType: TNotificationType;

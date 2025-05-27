@@ -4,9 +4,11 @@ import Spinner from "./Spinner";
 import { BASE_API } from "@/constants/baseAPI";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import { TNotificationUpdate } from "@/types/NotificationUpdate";
+import { useUserUpdateNotification } from "@/contexts/UserUpdateNotificationProvider";
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState<TNotificationUpdate[]>([]);
+  const { updateNotifications, addPaginatedUpdateNotifications } = useUserUpdateNotification();
+
   const [page, setPage] = useState<number>(0);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
 
@@ -63,7 +65,7 @@ export default function Notifications() {
           const sortedPages = Array.from(pageDataMap.current.keys()).sort((a, b) => a - b);
           const merged = sortedPages.flatMap((i) => pageDataMap.current.get(i) || []);
 
-          setNotifications((prev) => merged);
+          addPaginatedUpdateNotifications(merged);
         }
       } catch (e: unknown) {
         console.log(e);
@@ -77,14 +79,14 @@ export default function Notifications() {
     if (hasMoreData && document.body.scrollHeight <= window.innerHeight) {
       setPage((prev) => prev + 1);
     }
-  }, [notifications, hasMoreData]);
+  }, [updateNotifications, hasMoreData]);
 
   return (
     <div className="flex justify-center my-24">
       <div className="border rounded-lg w-[80ch]">
         <ul className="flex flex-col w-full justify-center  [&>*:nth-child(even)]:bg-gray-50">
-          {notifications.length > 0 ? (
-            notifications.map((notification) => createNotificationElement(notification, false))
+          {updateNotifications.length > 0 ? (
+            updateNotifications.map((notification) => createNotificationElement(notification, false))
           ) : (
             <div className="flex flex-col justify-center items-center">
               <div>Nothing to see here... yet.</div>

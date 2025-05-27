@@ -8,7 +8,7 @@ import { getJoinMonthYearFromDateTimeString } from "@/util/convertDateTimeString
 import UpdateFeed from "./UpdateFeed";
 
 export default function ProfileAndSettings() {
-  const [selected, setSelected] = useState<TUserPrivacySetting>();
+  const [selected, setSelected] = useState<TUserPrivacySetting | null>(null);
   const [expandedBio, setExpandedBio] = useState<boolean>(false);
   const { user, setUser } = useUser();
 
@@ -47,6 +47,8 @@ export default function ProfileAndSettings() {
           const data = await res.json();
 
           setUser(data);
+
+          console.log(data.privacySetting);
           setSelected(data.privacySetting);
         } catch (e: unknown) {
           console.log(e);
@@ -98,7 +100,7 @@ export default function ProfileAndSettings() {
           <label htmlFor="privacySetting">Privacy Setting:</label>
           <select
             id="privacySetting"
-            value={selected}
+            value={selected || user?.privacySetting}
             onChange={handleChange}
             className="ml-auto border px-2 py-1 rounded-md"
           >

@@ -1,12 +1,14 @@
 import { TNotificationFollowRequest } from "@/types/NotificationFollowRequest";
 import { createContext, useContext, useState } from "react";
 
-type TUserNotificationContext = {
-  notifications: TNotificationFollowRequest[] | null;
-  setNotifications: (notifications: TNotificationFollowRequest[] | null) => void;
+type TFollowRequestNotificationContext = {
+  followRequestNotifications: TNotificationFollowRequest[];
+  setFollowRequestNotifications: (notifications: TNotificationFollowRequest[]) => void;
+  addLiveFollowRequestNotification: (notifications: TNotificationFollowRequest) => void;
+  addPaginatedFollowRequestNotifications: (notifications: TNotificationFollowRequest[]) => void;
 };
 
-const UserFollowRequestNotificationContext = createContext<TUserNotificationContext | null>(null);
+const UserFollowRequestNotificationContext = createContext<TFollowRequestNotificationContext | null>(null);
 
 export const useUserFollowRequestNotification = () => {
   const context = useContext(UserFollowRequestNotificationContext);
@@ -19,9 +21,29 @@ export const useUserFollowRequestNotification = () => {
 };
 
 export default function UserFollowRequestNotificationProvider({ children }: { children: React.ReactNode }) {
-  const [notifications, setNotifications] = useState<TNotificationFollowRequest[] | null>(null);
+  const [followRequestNotifications, setFollowRequestNotifications] = useState<TNotificationFollowRequest[]>([]);
+
+  const addLiveFollowRequestNotification = (notification: TNotificationFollowRequest) => {
+    setFollowRequestNotifications((prev) => [notification, ...prev]);
+  };
+
+  const addPaginatedFollowRequestNotifications = (notifications: TNotificationFollowRequest[]) => {
+    setFollowRequestNotifications((prev) => {
+      const prevIds = new Set(prev.map((n) => n.id));
+      const filtered = notifications.filter((notification) => !prevIds.has(notification.id));
+      return [...prev, ...filtered];
+    });
+  };
+
   return (
-    <UserFollowRequestNotificationContext.Provider value={{ notifications, setNotifications }}>
+    <UserFollowRequestNotificationContext.Provider
+      value={{
+        followRequestNotifications,
+        setFollowRequestNotifications,
+        addLiveFollowRequestNotification,
+        addPaginatedFollowRequestNotifications,
+      }}
+    >
       {children}
     </UserFollowRequestNotificationContext.Provider>
   );

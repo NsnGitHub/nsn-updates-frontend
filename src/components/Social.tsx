@@ -4,9 +4,11 @@ import { TNotificationFollowRequest } from "@/types/NotificationFollowRequest";
 import { BASE_API } from "@/constants/baseAPI";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import Spinner from "./Spinner";
+import { useUserFollowRequestNotification } from "@/contexts/UserFollowRequestNotificationProvider";
 
 export default function Social() {
-  const [followNotifications, setFollowNotifications] = useState<TNotificationFollowRequest[]>([]);
+  const { followRequestNotifications, addPaginatedFollowRequestNotifications } = useUserFollowRequestNotification();
+
   const [page, setPage] = useState<number>(0);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
 
@@ -64,7 +66,7 @@ export default function Social() {
           const sortedPages = Array.from(pageDataMap.current.keys()).sort((a, b) => a - b);
           const merged = sortedPages.flatMap((i) => pageDataMap.current.get(i) || []);
 
-          setFollowNotifications(merged);
+          addPaginatedFollowRequestNotifications(merged);
         }
       } catch (e: unknown) {
         console.log(e);
@@ -78,14 +80,14 @@ export default function Social() {
     if (hasMoreData && document.body.scrollHeight <= window.innerHeight) {
       setPage((prev) => prev + 1);
     }
-  }, [followNotifications, hasMoreData]);
+  }, [followRequestNotifications, hasMoreData]);
 
   return (
     <div className="flex justify-center my-24">
       <div className="border rounded-lg w-[80ch]">
         <ul className="flex flex-col w-full justify-center  [&>*:nth-child(even)]:bg-gray-50">
-          {followNotifications.length > 0 ? (
-            followNotifications.map((notification) => createFollowRequestElement(notification))
+          {followRequestNotifications.length > 0 ? (
+            followRequestNotifications.map((notification) => createFollowRequestElement(notification))
           ) : (
             <div className="flex flex-col justify-center items-center">
               <div>Nothing to see here... yet.</div>
@@ -96,7 +98,7 @@ export default function Social() {
           <div ref={loaderRef}>
             <Spinner />
           </div>
-        )} 
+        )}
       </div>
     </div>
   );

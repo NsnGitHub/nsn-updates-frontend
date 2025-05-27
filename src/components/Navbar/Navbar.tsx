@@ -9,6 +9,8 @@ import NavbarSearch from "./NavbarSearch";
 import IconDropdown from "./IconDropdown";
 import fetchWithTokenRefresh from "@/util/fetchWithTokenRefresh";
 import { useNavigate } from "react-router-dom";
+import { useUserUpdateNotification } from "@/contexts/UserUpdateNotificationProvider";
+import { useUserFollowRequestNotification } from "@/contexts/UserFollowRequestNotificationProvider";
 
 type NavbarProps = {
   setCreatingUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,11 +50,12 @@ const refreshUserWs = async () => {
 
 export default function Navbar({ setCreatingUpdate }: NavbarProps) {
   const stompClientRef = useRef<Client | null>(null);
-  const [friendRequestNotificationCount, setFriendRequestNotificationCount] = useState<number>(0);
+  const [followRequestNotificationCount, setFollowRequestNotificationCount] = useState<number>(0);
   const [updateNotificationCount, setUpdateNotificationCount] = useState<number>(0);
 
-  const [updateNotifications, setUpdateNotifications] = useState<any>([]);
-  const [friendRequestNotifications, setFriendRequestNotifications] = useState<any>([]);
+  const { updateNotifications, addLiveUpdateNotifications, setUpdateNotifications } = useUserUpdateNotification();
+  const { followRequestNotifications, addLiveFollowRequestNotification, setFollowRequestNotifications } =
+    useUserFollowRequestNotification();
 
   const navigate = useNavigate();
 
@@ -74,7 +77,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
 
         const data = await res.json();
 
-        setFriendRequestNotifications(data || []);
+        setFollowRequestNotifications(data || []);
 
         return;
       } catch (e: unknown) {
@@ -132,7 +135,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
 
         const data = await res.json();
 
-        setFriendRequestNotificationCount(data.unreadFollowCount || 0);
+        setFollowRequestNotificationCount(data.unreadFollowCount || 0);
         setUpdateNotificationCount(data.unreadUpdateCount || 0);
 
         return;
@@ -149,10 +152,10 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
       const msg = await JSON.parse(message.body);
       console.log(msg);
 
-      setFriendRequestNotificationCount((prevCount) => prevCount + 1);
+      setFollowRequestNotificationCount((prevCount) => prevCount + 1);
 
       // Msg is parsed into a NotificationFollowRequest
-      setFriendRequestNotifications((prevNotifications: any) => [msg, ...prevNotifications]);
+      addLiveFollowRequestNotification(msg);
     };
 
     const onNotificationMessageReceived = async (message: any) => {
@@ -162,7 +165,7 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
       setUpdateNotificationCount((prevCount) => prevCount + msg.sizeOfBatch);
 
       // TODO: Msg here is a NotificationBatch, so we need to extract the individual notifications from the batch
-      setUpdateNotifications((prevNotifications: any) => [...msg.notificationDtoList, ...prevNotifications]);
+      addLiveUpdateNotifications(msg.notificationDtoList.reverse());
     };
 
     const reconnectStomp = async () => {
@@ -235,8 +238,8 @@ export default function Navbar({ setCreatingUpdate }: NavbarProps) {
       </li>
       <li className="relative hover:scale-110 hover:cursor-pointer" onClick={() => navigate("/social")}>
         <IconDropdown
-          alertCount={friendRequestNotificationCount}
-          data={friendRequestNotifications}
+          alertCount={followRequestNotificationCount}
+          data={followRequestNotifications}
           type="friendRequest"
         >
           <UserRoundPlusIcon className={iconSize} />
